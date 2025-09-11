@@ -787,6 +787,7 @@ GameObject:
   - component: {fileID: 1552248553}
   - component: {fileID: 1552248552}
   - component: {fileID: 1552248551}
+  - component: {fileID: 1552248554}
   m_Layer: 5
   m_Name: MineMap
   m_TagString: Untagged
@@ -884,6 +885,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1552248549}
   m_CullTransparentMesh: 1
+--- !u!114 &1552248554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1552248549}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdb950401c03a0746a05687469646907, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _scrollRect: {fileID: 1552248551}
+  _content: {fileID: 258030906}
+  _cellPrefab: {fileID: 2283110526421556170, guid: 93c9ceaf1d387a54e96edb9f33237669, type: 3}
+  _cellSize: 100
+  _controller: {fileID: 1187866292}
 --- !u!1 &1913772313
 GameObject:
   m_ObjectHideFlags: 0

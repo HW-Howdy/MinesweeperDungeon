@@ -16,21 +16,22 @@ public class MineMapController : MonoBehaviour
 {
 	private char[,] originMap;
 
-	public int Raws { get; private set; }
-	public int Cols { get; private set; }
+	public static int Cols { get; private set; }
+	public static int Rows { get; private set; }
+	public static int Length { get => Rows * Cols; }
 
-	public void Start()
+	public void Awake()
 	{
-		ResizeMap(5, 5);
+		ResizeMap(7, 7);
 		FillupMap(0.2f, 0.05f);
 		ShowMapLog();
 	}
 
-	public void ResizeMap(int raws, int cols)
+	public void ResizeMap(int cols, int rows)
 	{
-		Raws = raws;
 		Cols = cols;
-		originMap = new char[Raws, Cols];
+		Rows = rows;
+		originMap = new char[Cols, Rows];
 		return;
 	}
 
@@ -56,6 +57,8 @@ public class MineMapController : MonoBehaviour
 			itemCount = (int)MathF.Floor(item * originMap.Length);
 		else
 			itemCount = (int)item;
+		if (mineCount + itemCount + 1 >= originMap.Length)
+			throw (new Exception("특수칸은 맵 전체 칸 수보다 클 수 없음"));
 		FillupMap(mineCount, itemCount);
 		return ;
 	}
@@ -68,8 +71,8 @@ public class MineMapController : MonoBehaviour
 
 		while (++i <= mine)
 		{
-			x = UnityEngine.Random.Range(0, Raws);
-			y = UnityEngine.Random.Range(0, Cols);
+			x = UnityEngine.Random.Range(0, Cols);
+			y = UnityEngine.Random.Range(0, Rows);
 			if (originMap[x, y] >= 100)
 				--i;
 			else
@@ -81,8 +84,8 @@ public class MineMapController : MonoBehaviour
 		i = 0;
 		while (++i <= item)
 		{
-			x = UnityEngine.Random.Range(0, Raws);
-			y = UnityEngine.Random.Range(0, Cols);
+			x = UnityEngine.Random.Range(0, Cols);
+			y = UnityEngine.Random.Range(0, Rows);
 			if (originMap[x, y] >= 100)
 				--i;
 			else
@@ -94,8 +97,8 @@ public class MineMapController : MonoBehaviour
 		i = 0;
 		while (i < 1)
 		{
-			x = UnityEngine.Random.Range(0, Raws);
-			y = UnityEngine.Random.Range(0, Cols);
+			x = UnityEngine.Random.Range(0, Cols);
+			y = UnityEngine.Random.Range(0, Rows);
 			if (originMap[x, y] >= 100)
 				continue ;
 			else
@@ -108,16 +111,16 @@ public class MineMapController : MonoBehaviour
 		return;
 	}
 
-	private void AddRoundCell(int raw, int col, int count = 1)
+	private void AddRoundCell(int col, int row, int count = 1)
 	{
-		int xt = raw + 1;
-		int yt = col + 1;
+		int xt = col + 1;
+		int yt = row + 1;
 
-		for (int i = raw - 1; i <= xt; i++)
+		for (int i = col - 1; i <= xt; i++)
 		{
-			for (int j = col - 1; j <= yt; j++)
+			for (int j = row - 1; j <= yt; j++)
 			{
-				if (i < 0 || j < 0 || i >= Raws || j >= Cols)
+				if (i < 0 || j < 0 || i >= Cols || j >= Rows)
 					continue ;
 				if (originMap[i, j] < 100)
 					originMap[i, j] += (char)(count);
@@ -136,9 +139,9 @@ public class MineMapController : MonoBehaviour
 	{
 		StringBuilder sb = new StringBuilder();
 
-		for (int i = 0; i < Raws; i++)
+		for (int i = 0; i < Cols; i++)
 		{
-			for (int j = 0; j < Cols; j++)
+			for (int j = 0; j < Rows; j++)
 			{
 				sb.Append(GetCountResult(i, j));
 				sb.Append('\t');
@@ -149,13 +152,13 @@ public class MineMapController : MonoBehaviour
 		return ;
 	}
 
-	public char GetCountResult(int raw, int col)
+	public char GetCountResult(int col, int row)
 	{
 		char result;
 
-		if (raw < 0 || col < 0 || raw >= Raws || col >= Cols)
+		if (col < 0 || row < 0 || col >= Cols || row >= Rows)
 			throw (new Exception("맵의 범위를 넘어서는 접근"));
-		result = originMap[raw, col];
+		result = originMap[col, row];
 		if (result < 100)
 			result = (char)(result / 10 + result % 10 + '0');
 		else if (result == 100)
@@ -167,10 +170,10 @@ public class MineMapController : MonoBehaviour
 		return (result);
 	}
 
-	public char GetCellValue(int raw, int col)
+	public char GetCellValue(int col, int row)
 	{
-		if (raw < 0 || col < 0 || raw >= Raws || col >= Cols)
+		if (col < 0 || row < 0 || col >= Cols || row >= Rows)
 			throw (new Exception("맵의 범위를 넘어서는 접근"));
-		return (originMap[raw, col]);
+		return (originMap[col, row]);
 	}
 }
