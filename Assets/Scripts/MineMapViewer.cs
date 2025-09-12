@@ -23,10 +23,6 @@ public class MineMapViewer : MonoBehaviour
 	[SerializeField]
 	private int cellSize = 100; // 각 칸 크기 (px)
 
-	[Header("Controller")]
-	[SerializeField]
-	private MineMapController _controller;
-
 	private int visibleRows;
 	private int visibleCols;
 
@@ -47,12 +43,12 @@ public class MineMapViewer : MonoBehaviour
 		return ;
 	}
 
-	public void Resize(int targetSize)
+	private void Resize(int targetSize)
 	{
 		cellSize = Math.Clamp(targetSize, 20, 200);
 		_inputFieldCellSize.text = cellSize.ToString();
 		// Content 크기를 전체 데이터 크기에 맞춤
-		_content.sizeDelta = new Vector2(MineMapController.Rows * cellSize, MineMapController.Cols * cellSize);
+		_content.sizeDelta = new Vector2(MineMapModel.Instance.Rows * cellSize, MineMapModel.Instance.Cols * cellSize);
 
 		// Viewport에 보이는 셀 개수 계산 (+1 여유)
 		RectTransform viewport = _scrollRect.viewport;
@@ -97,7 +93,7 @@ public class MineMapViewer : MonoBehaviour
 
 			GameObject cell = cellPool[i];
 
-			if (x < 0 || x >= MineMapController.Cols || y < 0 || y >= MineMapController.Rows)
+			if (x < 0 || x >= MineMapModel.Instance.Cols || y < 0 || y >= MineMapModel.Instance.Rows)
 			{
 				cell.SetActive(false);
 				continue;
@@ -106,7 +102,7 @@ public class MineMapViewer : MonoBehaviour
 			cell.SetActive(true);
 			RectTransform rt = cell.GetComponent<RectTransform>();
 			rt.anchoredPosition = new Vector2(y * cellSize + cellSize / 2, - x * cellSize - cellSize / 2);
-			cell.GetComponentInChildren<TMP_Text>().text = $"{x}, {y}\n{_controller.GetCountResult(x, y)}";
+			cell.GetComponentInChildren<TMP_Text>().text = $"{x}, {y}\n{MineMapModel.Instance.GetCountResult(x, y)}";
 		}
 		return ;
 	}

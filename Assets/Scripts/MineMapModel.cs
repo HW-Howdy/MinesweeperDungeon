@@ -12,22 +12,35 @@ using UnityEngine;
  * 101		=> 다음 층으로 i
  * 102		=> 아이템 획득 n
  */
-public class MineMapController : MonoBehaviour
+public class MineMapModel : Singleton<MineMapModel>
 {
 	private char[,] originMap;
 
-	public static int Cols { get; private set; }
-	public static int Rows { get; private set; }
-	public static int Length { get => Rows * Cols; }
+	[SerializeField]
+	private int _startRows = 5;
+	[SerializeField]
+	private int _startCols = 5;
 
-	public void Awake()
+	public int Cols { get; private set; }
+	public int Rows { get; private set; }
+	public int Length { get => Rows * Cols; }
+
+	protected override void Awake()
 	{
-		ResizeMap(7, 10);
-		FillupMap(0.2f, 0.05f);
-		ShowMapLog();
+		base.Awake();
+		SetupMap(_startRows, _startCols, 0.2f, 0.05f);
+		return ;
 	}
 
-	public void ResizeMap(int rows, int cols)
+	public void SetupMap(int rows, int cols, float mine = 0.1f, float item = 1)
+	{
+		ResizeMap(rows, cols);
+		ClearMap();
+		FillupMap(mine, item);
+		return ;
+	}
+
+	private void ResizeMap(int rows, int cols)
 	{
 		Cols = cols;
 		Rows = rows;
@@ -135,22 +148,22 @@ public class MineMapController : MonoBehaviour
 		return ;
 	}
 
-	private void ShowMapLog()
-	{
-		StringBuilder sb = new StringBuilder();
+	//private void ShowMapLog()
+	//{
+	//	StringBuilder sb = new StringBuilder();
 
-		for (int i = 0; i < Cols; i++)
-		{
-			for (int j = 0; j < Rows; j++)
-			{
-				sb.Append(GetCountResult(i, j));
-				sb.Append('\t');
-			}
-			sb.Append('\n');
-		}
-		Debug.Log(sb.ToString());
-		return ;
-	}
+	//	for (int i = 0; i < Cols; i++)
+	//	{
+	//		for (int j = 0; j < Rows; j++)
+	//		{
+	//			sb.Append(GetCountResult(i, j));
+	//			sb.Append('\t');
+	//		}
+	//		sb.Append('\n');
+	//	}
+	//	Debug.Log(sb.ToString());
+	//	return ;
+	//}
 
 	public char GetCountResult(int col, int row)
 	{
