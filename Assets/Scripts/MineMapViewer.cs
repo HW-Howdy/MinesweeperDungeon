@@ -64,12 +64,12 @@ public class MineMapViewer : MonoBehaviour
 
 		for (int i = 0; i < cellPool.Count; i++)
 		{
-			int row = i % visibleRows + firstRow;
-			int col = i / visibleRows + firstCol;
+			int x = i / visibleCols + firstRow;
+			int y = i % visibleCols + firstCol;
 
 			GameObject cell = cellPool[i];
 
-			if (row < 0 || row >= MineMapController.Rows || col < 0 || col >= MineMapController.Cols)
+			if (x < 0 || x >= MineMapController.Cols || y < 0 || y >= MineMapController.Rows)
 			{
 				cell.SetActive(false);
 				continue;
@@ -77,8 +77,8 @@ public class MineMapViewer : MonoBehaviour
 
 			cell.SetActive(true);
 			RectTransform rt = cell.GetComponent<RectTransform>();
-			rt.anchoredPosition = new Vector2(col * _cellSize + _cellSize / 2, - row * _cellSize - _cellSize / 2);
-			cell.GetComponentInChildren<TMP_Text>().text = $"{col}, {row}\n{_controller.GetCountResult(col, row)}";
+			rt.anchoredPosition = new Vector2(y * _cellSize + _cellSize / 2, - x * _cellSize - _cellSize / 2);
+			cell.GetComponentInChildren<TMP_Text>().text = $"{x}, {y}\n{_controller.GetCountResult(x, y)}";
 		}
 		return ;
 	}

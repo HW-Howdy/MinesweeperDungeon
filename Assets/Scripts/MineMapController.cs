@@ -22,12 +22,12 @@ public class MineMapController : MonoBehaviour
 
 	public void Awake()
 	{
-		ResizeMap(7, 7);
+		ResizeMap(7, 10);
 		FillupMap(0.2f, 0.05f);
 		ShowMapLog();
 	}
 
-	public void ResizeMap(int cols, int rows)
+	public void ResizeMap(int rows, int cols)
 	{
 		Cols = cols;
 		Rows = rows;
