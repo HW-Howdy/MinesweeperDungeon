@@ -45,7 +45,7 @@ public class MineMapViewer : MonoBehaviour
 
 	private void Resize(int targetSize)
 	{
-		cellSize = Math.Clamp(targetSize, 20, 200);
+		cellSize = Math.Clamp(targetSize, 40, 200);
 		_inputFieldCellSize.text = cellSize.ToString();
 		// Content 크기를 전체 데이터 크기에 맞춤
 		_content.sizeDelta = new Vector2(MineMapModel.Instance.Rows * cellSize, MineMapModel.Instance.Cols * cellSize);
@@ -102,7 +102,7 @@ public class MineMapViewer : MonoBehaviour
 			cell.SetActive(true);
 			RectTransform rt = cell.GetComponent<RectTransform>();
 			rt.anchoredPosition = new Vector2(y * cellSize + cellSize / 2, - x * cellSize - cellSize / 2);
-			cell.GetComponentInChildren<TMP_Text>().text = $"{x}, {y}\n{MineMapModel.Instance.GetCountResult(x, y)}";
+			cell.GetComponent<CellModel>().SetLocate(y, x);
 		}
 		return ;
 	}

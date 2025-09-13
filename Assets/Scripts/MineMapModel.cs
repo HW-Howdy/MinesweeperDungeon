@@ -12,9 +12,19 @@ using UnityEngine;
  * 101		=> 다음 층으로 i
  * 102		=> 아이템 획득 n
  */
+
+public enum ECellState : byte
+{
+	Hidden =	0b0000_0000,
+	Open =		0b0000_0001,
+	FlagRed =	0b0000_0010,
+	FlagBlue =	0b0000_0100,
+}
+
 public class MineMapModel : Singleton<MineMapModel>
 {
 	private char[,] originMap;
+	private ECellState[,] stateMap;
 
 	[SerializeField]
 	private int _startRows = 5;
@@ -23,6 +33,7 @@ public class MineMapModel : Singleton<MineMapModel>
 
 	public int Cols { get; private set; }
 	public int Rows { get; private set; }
+	public int RareCellCount { get; private set; }
 	public int Length { get => Rows * Cols; }
 
 	protected override void Awake()
@@ -45,6 +56,7 @@ public class MineMapModel : Singleton<MineMapModel>
 		Cols = cols;
 		Rows = rows;
 		originMap = new char[Cols, Rows];
+		stateMap = new ECellState[Cols, Rows];
 		return;
 	}
 
@@ -121,6 +133,7 @@ public class MineMapModel : Singleton<MineMapModel>
 				i++;
 			}
 		}
+		RareCellCount = mine + item + 1;
 		return;
 	}
 
@@ -145,6 +158,7 @@ public class MineMapModel : Singleton<MineMapModel>
 	private void ClearMap()
 	{
 		Array.Clear(originMap, 0, originMap.Length);
+		Array.Clear(stateMap, 0, stateMap.Length);
 		return ;
 	}
 
@@ -165,13 +179,13 @@ public class MineMapModel : Singleton<MineMapModel>
 	//	return ;
 	//}
 
-	public char GetCountResult(int col, int row)
+	public char GetCountResult(int y, int x)
 	{
 		char result;
 
-		if (col < 0 || row < 0 || col >= Cols || row >= Rows)
+		if (y < 0 || x < 0 || y >= Cols || x >= Rows)
 			throw (new Exception("맵의 범위를 넘어서는 접근"));
-		result = originMap[col, row];
+		result = originMap[y, x];
 		if (result < 100)
 			result = (char)(result / 10 + result % 10 + '0');
 		else if (result == 100)
@@ -183,10 +197,34 @@ public class MineMapModel : Singleton<MineMapModel>
 		return (result);
 	}
 
-	public char GetCellValue(int col, int row)
+	public char GetCellValue(int y, int x)
 	{
-		if (col < 0 || row < 0 || col >= Cols || row >= Rows)
+		if (y < 0 || x < 0 || y >= Cols || x >= Rows)
 			throw (new Exception("맵의 범위를 넘어서는 접근"));
-		return (originMap[col, row]);
+		return (originMap[y, x]);
+	}
+
+	public ECellState GetCellState(int y, int x)
+	{
+		if (y < 0 || x < 0 || y >= Cols || x >= Rows)
+			throw (new Exception("맵의 범위를 넘어서는 접근"));
+		return (stateMap[y, x]);
+	}
+
+	public void FlagCellState(int y, int x, ECellState state, out ECellState result)
+	{
+		if ((stateMap[y, x] & state) == 0)
+			stateMap[y, x] |= state;
+		else
+			stateMap[y, x] &= ~state;
+		result = stateMap[y, x];
+		return ;
+	}
+
+	public void SetCellState(int y, int x, ECellState state, out ECellState result)
+	{
+		stateMap[y, x] = state;
+		result = stateMap[y, x];
+		return ;
 	}
 }
