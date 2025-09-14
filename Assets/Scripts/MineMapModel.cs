@@ -171,16 +171,16 @@ public class MineMapModel : Singleton<MineMapModel>
 		{
 			for (int j = 0; j < Rows; j++)
 			{
-				sb.Append(GetCountResult(j, i));
+				sb.Append(GetCountResultAsChar(j, i));
 				sb.Append('.');
 			}
 			sb.Append('\n');
 		}
 		Debug.Log(sb.ToString());
-		return;
+		return ;
 	}
 
-	public char GetCountResult(int y, int x)
+	public char GetCountResultAsChar(int y, int x)
 	{
 		char result;
 
@@ -284,6 +284,41 @@ public class MineMapModel : Singleton<MineMapModel>
 		}
 
 		return ;
+	}
+
+	public bool CheckAround(int y, int x)
+	{
+		bool result = (CountAroundFlag(y, x) == (byte)(GetCountResultAsChar(y, x) - '0'));
+
+		if (result)
+		{
+			for (int i = -1; i <= 1; i++)
+			{
+				for (int j = -1; j <= 1; j++)
+					OpenCellEvent(y + j, x + i);
+			}
+		}
+
+		return (result);
+	}
+
+	private byte CountAroundFlag(int y, int x)
+	{
+		byte result = 0;
+
+		for (int i = -1; i <= 1; i++)
+		{
+			for (int j = -1; j <= 1; j++)
+			{
+				if (IsOverMap(y + j, x + i))
+					continue ;
+				if (IsCellState(GetCellState(y + j, x + i), ECellState.FlagRed) || IsCellState(GetCellState(y + j, x + i), ECellState.FlagBlue))
+					result += 1;
+				else if (IsCellState(GetCellState(y + j, x + i), ECellState.Open) && GetCellValue(y + j, x + i) >= 100)
+					result += 1;
+			}
+		}
+		return (result);
 	}
 
 	public bool IsCellState(ECellState target, ECellState state)

@@ -44,7 +44,7 @@ public class CellModel : MonoBehaviour, IPointerClickHandler
 		if (IsCellState(state, ECellState.Open))
 		{
 			_background.color = Color.white;
-			_text.text = MineMapModel.Instance.GetCountResult(y, x).ToString();
+			_text.text = MineMapModel.Instance.GetCountResultAsChar(y, x).ToString();
 		}
 		else if (IsCellState(state, ECellState.FlagRed))
 		{
@@ -67,8 +67,14 @@ public class CellModel : MonoBehaviour, IPointerClickHandler
 	public void OnPointerClick(PointerEventData eventData)
 	{
 		if (IsCellState(state, ECellState.Open))
-			return ;
-		if (eventData.button == PointerEventData.InputButton.Left)
+		{
+			if (eventData.button == PointerEventData.InputButton.Left && eventData.clickCount == 2)
+			{
+				if (MineMapModel.Instance.CheckAround(y, x))
+					ActionAfterClick?.Invoke();
+			}
+		}
+		else if (eventData.button == PointerEventData.InputButton.Left)
 		{
 			MineMapModel.Instance.OpenCell(y, x);
 			ActionAfterClick?.Invoke();
