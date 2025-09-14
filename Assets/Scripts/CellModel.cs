@@ -21,6 +21,8 @@ public class CellModel : MonoBehaviour, IPointerClickHandler
 
 	public Vector2Int Locate { get => new Vector2Int(x, y); }
 
+	public static Action ActionAfterClick;
+
 	public void SetLocate(int y, int x)
 	{
 		this.x = x;
@@ -30,24 +32,31 @@ public class CellModel : MonoBehaviour, IPointerClickHandler
 		return ;
 	}
 
+	public void ReloadState(int y, int x)
+	{
+		state = MineMapModel.Instance.GetCellState(y, x);
+		UpdateUI();
+		return;
+	}
+
 	public void UpdateUI()
 	{
-		if (state == ECellState.Open)
+		if (IsCellState(state, ECellState.Open))
 		{
 			_background.color = Color.white;
 			_text.text = MineMapModel.Instance.GetCountResult(y, x).ToString();
 		}
-		else if (state == ECellState.FlagRed)
+		else if (IsCellState(state, ECellState.FlagRed))
 		{
 			_background.color = Color.gray;
 			_text.text = "<color=red>Red</color>";
 		}
-		else if (state == ECellState.FlagBlue)
+		else if (IsCellState(state, ECellState.FlagBlue))
 		{
 			_background.color = Color.gray;
 			_text.text = "<color=blue>Blue</color>";
 		}
-		else if (state == ECellState.Hidden)
+		else if (IsCellState(state, ECellState.Hidden))
 		{
 			_background.color = Color.gray;
 			_text.text = "";
@@ -57,30 +66,28 @@ public class CellModel : MonoBehaviour, IPointerClickHandler
 
 	public void OnPointerClick(PointerEventData eventData)
 	{
-		if (state == ECellState.Open)
+		if (IsCellState(state, ECellState.Open))
 			return ;
 		if (eventData.button == PointerEventData.InputButton.Left)
 		{
-			if ((state & ECellState.FlagRed) == 0 && (state & ECellState.FlagBlue) == 0)
-				MineMapModel.Instance.SetCellState(y, x, ECellState.Open, out state);
+			MineMapModel.Instance.OpenCell(y, x);
+			ActionAfterClick?.Invoke();
 		}
 		else if (eventData.button == PointerEventData.InputButton.Right)
 		{
-			if ((state & ECellState.FlagRed) == 0 && (state & ECellState.FlagBlue) == 0)
-			{
-				MineMapModel.Instance.FlagCellState(y, x, ECellState.FlagRed, out state);
-			}
-			else if ((state & ECellState.FlagRed) == ECellState.FlagRed)
-			{
-				MineMapModel.Instance.FlagCellState(y, x, ECellState.FlagRed, out state);
-				MineMapModel.Instance.FlagCellState(y, x, ECellState.FlagBlue, out state);
-			}
-			else if ((state & ECellState.FlagBlue) == ECellState.FlagBlue)
-			{
-				MineMapModel.Instance.FlagCellState(y, x, ECellState.FlagBlue, out state);
-			}
+			MineMapModel.Instance.FlagCell(y, x, out state);
+			UpdateUI();
 		}
-		UpdateUI();
 		return ;
+	}
+
+	public bool IsCellState(ECellState target, ECellState state)
+	{
+		if (target == ECellState.Hidden && state == ECellState.Hidden)
+			return (true);
+		else if ((target & state) == ECellState.Hidden)
+			return (false);
+		else
+			return (true);
 	}
 }

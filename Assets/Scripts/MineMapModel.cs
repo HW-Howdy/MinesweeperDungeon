@@ -48,6 +48,7 @@ public class MineMapModel : Singleton<MineMapModel>
 		ResizeMap(rows, cols);
 		ClearMap();
 		FillupMap(mine, item);
+		ShowMapLog();
 		return ;
 	}
 
@@ -162,28 +163,28 @@ public class MineMapModel : Singleton<MineMapModel>
 		return ;
 	}
 
-	//private void ShowMapLog()
-	//{
-	//	StringBuilder sb = new StringBuilder();
+	private void ShowMapLog()
+	{
+		StringBuilder sb = new StringBuilder();
 
-	//	for (int i = 0; i < Cols; i++)
-	//	{
-	//		for (int j = 0; j < Rows; j++)
-	//		{
-	//			sb.Append(GetCountResult(i, j));
-	//			sb.Append('\t');
-	//		}
-	//		sb.Append('\n');
-	//	}
-	//	Debug.Log(sb.ToString());
-	//	return ;
-	//}
+		for (int i = 0; i < Cols; i++)
+		{
+			for (int j = 0; j < Rows; j++)
+			{
+				sb.Append(GetCountResult(j, i));
+				sb.Append('.');
+			}
+			sb.Append('\n');
+		}
+		Debug.Log(sb.ToString());
+		return;
+	}
 
 	public char GetCountResult(int y, int x)
 	{
 		char result;
 
-		if (y < 0 || x < 0 || y >= Cols || x >= Rows)
+		if (IsOverMap(y, x))
 			throw (new Exception("맵의 범위를 넘어서는 접근"));
 		result = originMap[y, x];
 		if (result < 100)
@@ -199,19 +200,19 @@ public class MineMapModel : Singleton<MineMapModel>
 
 	public char GetCellValue(int y, int x)
 	{
-		if (y < 0 || x < 0 || y >= Cols || x >= Rows)
+		if (IsOverMap(y, x))
 			throw (new Exception("맵의 범위를 넘어서는 접근"));
 		return (originMap[y, x]);
 	}
 
 	public ECellState GetCellState(int y, int x)
 	{
-		if (y < 0 || x < 0 || y >= Cols || x >= Rows)
+		if (IsOverMap(y, x))
 			throw (new Exception("맵의 범위를 넘어서는 접근"));
 		return (stateMap[y, x]);
 	}
 
-	public void FlagCellState(int y, int x, ECellState state, out ECellState result)
+	private void FlagCellState(int y, int x, ECellState state, out ECellState result)
 	{
 		if ((stateMap[y, x] & state) == 0)
 			stateMap[y, x] |= state;
@@ -221,10 +222,85 @@ public class MineMapModel : Singleton<MineMapModel>
 		return ;
 	}
 
-	public void SetCellState(int y, int x, ECellState state, out ECellState result)
+	private void SetCellState(int y, int x, ECellState state, out ECellState result)
 	{
 		stateMap[y, x] = state;
 		result = stateMap[y, x];
 		return ;
+	}
+
+	public void OpenCell(int y, int x)
+	{
+		ECellState target = GetCellState(y, x);
+
+		if (IsCellState(target, ECellState.Open) || IsCellState(target, ECellState.FlagRed) || IsCellState(target, ECellState.FlagBlue))
+		{
+			return ;
+		}
+		OpenCellEvent(y, x);
+		return ;
+	}
+
+	public void FlagCell(int y, int x, out ECellState state)
+	{
+		ECellState target = GetCellState(y, x);
+
+		if (IsCellState(target, ECellState.Open))
+		{
+			state = target;
+			return ;
+		}
+		if (!(IsCellState(target, ECellState.FlagRed) || IsCellState(target, ECellState.FlagBlue)) )
+		{
+			FlagCellState(y, x, ECellState.FlagRed, out state);
+		}
+		else if (IsCellState(target, ECellState.FlagRed) && !IsCellState(target, ECellState.FlagBlue) )
+		{
+			FlagCellState(y, x, ECellState.FlagRed, out state);
+			FlagCellState(y, x, ECellState.FlagBlue, out state);
+		}
+		else
+		{
+			FlagCellState(y, x, ECellState.FlagBlue, out state);
+		}
+		return ;
+	}
+
+	public void OpenCellEvent(int y, int x)
+	{
+		char value;
+
+		if (IsOverMap(y, x) || !IsCellState(GetCellState(y, x), ECellState.Hidden))
+			return ;
+		value = GetCellValue(y, x);
+		SetCellState(y, x, ECellState.Open, out ECellState temp);
+		if (value == 0)
+		{
+			for (int i = -1; i <= 1; i++)
+			{
+				for (int j = -1; j <= 1; j++)
+					OpenCellEvent(y + j, x + i);
+			}
+		}
+
+		return ;
+	}
+
+	public bool IsCellState(ECellState target, ECellState state)
+	{
+		if (target == ECellState.Hidden && state == ECellState.Hidden)
+			return (true);
+		else if ((target & state) == ECellState.Hidden)
+			return (false);
+		else
+			return (true);
+	}
+
+	public bool IsOverMap(int y, int x)
+	{
+		if (y < 0 || x < 0 || y >= Cols || x >= Rows)
+			return (true);
+		else
+			return (false);
 	}
 }

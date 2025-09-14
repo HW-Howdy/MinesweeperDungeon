@@ -32,6 +32,7 @@ public class MineMapViewer : MonoBehaviour
 	{
 		Resize(cellSize);
 		_scrollRect.onValueChanged.AddListener((_) => UpdateCells());
+		CellModel.ActionAfterClick += new Action(UpdateCellView);
 		return ;
 	}
 
@@ -90,19 +91,38 @@ public class MineMapViewer : MonoBehaviour
 		{
 			int x = i / visibleCols + firstRow;
 			int y = i % visibleCols + firstCol;
-
 			GameObject cell = cellPool[i];
 
-			if (x < 0 || x >= MineMapModel.Instance.Cols || y < 0 || y >= MineMapModel.Instance.Rows)
+			if (x < 0 || x >= MineMapModel.Instance.Rows || y < 0 || y >= MineMapModel.Instance.Cols)
 			{
 				cell.SetActive(false);
-				continue;
+				continue ;
 			}
-
 			cell.SetActive(true);
 			RectTransform rt = cell.GetComponent<RectTransform>();
 			rt.anchoredPosition = new Vector2(y * cellSize + cellSize / 2, - x * cellSize - cellSize / 2);
 			cell.GetComponent<CellModel>().SetLocate(y, x);
+		}
+		return ;
+	}
+
+	public void UpdateCellView()
+	{
+		float scrollY = _content.anchoredPosition.y;
+		float scrollX = -_content.anchoredPosition.x;
+
+		int firstRow = Mathf.FloorToInt(scrollY / cellSize);
+		int firstCol = Mathf.FloorToInt(scrollX / cellSize);
+
+		for (int i = 0; i < cellPool.Count; i++)
+		{
+			int x = i / visibleCols + firstRow;
+			int y = i % visibleCols + firstCol;
+			if (x < 0 || x >= MineMapModel.Instance.Rows || y < 0 || y >= MineMapModel.Instance.Cols)
+			{
+				continue ;
+			}
+			cellPool[i].GetComponent<CellModel>().ReloadState(y, x);
 		}
 		return ;
 	}
