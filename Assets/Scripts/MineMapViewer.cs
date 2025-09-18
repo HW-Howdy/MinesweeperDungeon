@@ -33,6 +33,7 @@ public class MineMapViewer : MonoBehaviour
 		Resize(cellSize);
 		_scrollRect.onValueChanged.AddListener((_) => UpdateCells());
 		CellModel.ActionAfterClick += new Action(UpdateCellView);
+		MineMapModel.Instance.ActionResizeMapAfter += Resize;
 		return ;
 	}
 
@@ -41,6 +42,12 @@ public class MineMapViewer : MonoBehaviour
 		if (!int.TryParse(_inputFieldCellSize.text, out int targetSize))
 			targetSize = 50;
 		Resize(targetSize);
+		return ;
+	}
+
+	private void Resize()
+	{
+		Resize(cellSize);
 		return ;
 	}
 

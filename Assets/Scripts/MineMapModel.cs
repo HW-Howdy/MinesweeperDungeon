@@ -9,8 +9,8 @@ using UnityEngine;
  * 0-8		=> 근처 함정의 수
  * 0X-8X	=> 근처 아이템 또는 출구의 수
  * 100		=> 함정 m
- * 101		=> 다음 층으로 i
- * 102		=> 아이템 획득 n
+ * 101		=> 아이템 i
+ * 102		=> 다음층 n
  */
 
 public enum ECellState : byte
@@ -21,25 +21,21 @@ public enum ECellState : byte
 	FlagBlue =	0b0000_0100,
 }
 
-public class MineMapModel : Singleton<MineMapModel>
+public class MineMapModel : ASingleton<MineMapModel>
 {
 	private char[,] originMap;
 	private ECellState[,] stateMap;
-
-	[SerializeField]
-	private int _startRows = 5;
-	[SerializeField]
-	private int _startCols = 5;
 
 	public int Cols { get; private set; }
 	public int Rows { get; private set; }
 	public int RareCellCount { get; private set; }
 	public int Length { get => Rows * Cols; }
 
+	public Action ActionResizeMapAfter;
+
 	protected override void Awake()
 	{
 		base.Awake();
-		SetupMap(_startRows, _startCols, 0.2f, 0.05f);
 		return ;
 	}
 
@@ -58,6 +54,7 @@ public class MineMapModel : Singleton<MineMapModel>
 		Rows = rows;
 		originMap = new char[Cols, Rows];
 		stateMap = new ECellState[Cols, Rows];
+		ActionResizeMapAfter?.Invoke();
 		return;
 	}
 
@@ -135,7 +132,7 @@ public class MineMapModel : Singleton<MineMapModel>
 			}
 		}
 		RareCellCount = mine + item + 1;
-		return;
+		return ;
 	}
 
 	private void AddRoundCell(int col, int row, int count = 1)
@@ -274,6 +271,7 @@ public class MineMapModel : Singleton<MineMapModel>
 			return ;
 		value = GetCellValue(y, x);
 		SetCellState(y, x, ECellState.Open, out ECellState temp);
+		GameManager.Instance.OpenCellEvent(value);
 		if (value == 0)
 		{
 			for (int i = -1; i <= 1; i++)

@@ -1,7 +1,7 @@
-﻿using System.Runtime.CompilerServices;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public abstract class Singleton<GType1> : MonoBehaviour where GType1 : MonoBehaviour
+public abstract class ASingleton<GType1> : MonoBehaviour where GType1 : MonoBehaviour
 {
 	private static GType1			_instance;
 
@@ -23,7 +23,7 @@ public abstract class Singleton<GType1> : MonoBehaviour where GType1 : MonoBehav
 			}
 			lock (_locker)
 			{
-				if (Singleton<GType1>._instance == null)
+				if (ASingleton<GType1>._instance == null)
 				{
 					_instance = FindAnyObjectByType<GType1>();
 					if (_instance == null)

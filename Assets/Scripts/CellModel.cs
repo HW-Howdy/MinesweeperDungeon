@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CellModel : MonoBehaviour, IPointerClickHandler
+public class CellModel : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
 	private int x;
 	private int y;
@@ -19,9 +19,11 @@ public class CellModel : MonoBehaviour, IPointerClickHandler
 	[SerializeField]
 	private TMP_Text _text;
 
-	public Vector2Int Locate { get => new Vector2Int(x, y); }
+	public Vector2Int Location { get => new Vector2Int(x, y); }
 
 	public static Action ActionAfterClick;
+	public static Action<char> ActionPointerEnter;
+	public static Action ActionPointerExit;
 
 	public void SetLocate(int y, int x)
 	{
@@ -64,6 +66,19 @@ public class CellModel : MonoBehaviour, IPointerClickHandler
 		return ;
 	}
 
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		if (IsCellState(state, ECellState.Open))
+			ActionPointerEnter?.Invoke(MineMapModel.Instance.GetCellValue(y, x));
+		return ;
+	}
+
+	public void OnPointerExit(PointerEventData eventData)
+	{
+		ActionPointerExit?.Invoke();
+		return;
+	}
+
 	public void OnPointerClick(PointerEventData eventData)
 	{
 		if (IsCellState(state, ECellState.Open))
@@ -78,6 +93,7 @@ public class CellModel : MonoBehaviour, IPointerClickHandler
 		{
 			MineMapModel.Instance.OpenCell(y, x);
 			ActionAfterClick?.Invoke();
+			ActionPointerEnter?.Invoke(MineMapModel.Instance.GetCellValue(y, x));
 		}
 		else if (eventData.button == PointerEventData.InputButton.Right)
 		{
