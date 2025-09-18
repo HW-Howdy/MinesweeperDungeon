@@ -127,20 +127,20 @@ public class GameManager : ASingleton<GameManager>
 	 * 0-8		=> 근처 함정의 수
 	 * 0X-8X	=> 근처 아이템 또는 출구의 수
 	 * 100		=> 함정 m
-	 * 101		=> 아이템 i
-	 * 102		=> 다음층 n
+	 * 200		=> 아이템 i
+	 * 300		=> 다음층 n
 	 */
-	public void OpenCellEvent(char value)
+	public void OpenCellEvent(short value)
 	{
-		if (value == 100)
+		if (value / 100 == 1)
 		{
 			counter.countCellMine++;
 		}
-		else if (value == 101)
+		else if (value / 100 == 2)
 		{
 			counter.countCellItem++;
 		}
-		else if (value == 102)
+		else if (value / 100 == 3)
 		{
 			NextFloor();
 		}

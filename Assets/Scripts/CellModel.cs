@@ -22,7 +22,7 @@ public class CellModel : MonoBehaviour, IPointerClickHandler, IPointerEnterHandl
 	public Vector2Int Location { get => new Vector2Int(x, y); }
 
 	public static Action ActionAfterClick;
-	public static Action<char> ActionPointerEnter;
+	public static Action<short> ActionPointerEnter;
 	public static Action ActionPointerExit;
 
 	public void SetLocate(int y, int x)

@@ -5,17 +5,17 @@ public class SweeperUI : MonoBehaviour
 {
 	public TMP_Text tmp;
 
-	public void Start()
+	public void Awake()
 	{
 		CellModel.ActionPointerEnter += UpdateUI;
 		CellModel.ActionPointerExit += RemoveUI;
 		return ;
 	}
 
-	public void UpdateUI(char value)
+	public void UpdateUI(short value)
 	{
-		if (value < 100)
-			tmp.text = $"<color=red>Mine : {value % 10}</color> | <color=blue>Item : {value / 10}</color>";
+		value %= 100;
+		tmp.text = $"<color=red>Mine : {value % 10}</color> | <color=blue>Item : {value / 10}</color>";
 		return ;
 	}
 

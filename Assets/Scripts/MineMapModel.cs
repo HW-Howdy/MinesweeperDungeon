@@ -9,8 +9,8 @@ using UnityEngine;
  * 0-8		=> 근처 함정의 수
  * 0X-8X	=> 근처 아이템 또는 출구의 수
  * 100		=> 함정 m
- * 101		=> 아이템 i
- * 102		=> 다음층 n
+ * 200		=> 아이템 i
+ * 300		=> 다음층 n
  */
 
 public enum ECellState : byte
@@ -23,7 +23,7 @@ public enum ECellState : byte
 
 public class MineMapModel : ASingleton<MineMapModel>
 {
-	private char[,] originMap;
+	private short[,] originMap;
 	private ECellState[,] stateMap;
 
 	public int Cols { get; private set; }
@@ -52,7 +52,7 @@ public class MineMapModel : ASingleton<MineMapModel>
 	{
 		Cols = cols;
 		Rows = rows;
-		originMap = new char[Cols, Rows];
+		originMap = new short[Cols, Rows];
 		stateMap = new ECellState[Cols, Rows];
 		ActionResizeMapAfter?.Invoke();
 		return;
@@ -100,7 +100,7 @@ public class MineMapModel : ASingleton<MineMapModel>
 				--i;
 			else
 			{
-				originMap[x, y] = (char)(100);
+				originMap[x, y] += 100;
 				AddRoundCell(x, y);
 			}
 		}
@@ -113,7 +113,7 @@ public class MineMapModel : ASingleton<MineMapModel>
 				--i;
 			else
 			{
-				originMap[x, y] = (char)(101);
+				originMap[x, y] += 200;
 				AddRoundCell(x, y, 10);
 			}
 		}
@@ -126,7 +126,7 @@ public class MineMapModel : ASingleton<MineMapModel>
 				continue ;
 			else
 			{
-				originMap[x, y] = (char)(102);
+				originMap[x, y] += 300;
 				AddRoundCell(x, y, 10);
 				i++;
 			}
@@ -135,7 +135,7 @@ public class MineMapModel : ASingleton<MineMapModel>
 		return ;
 	}
 
-	private void AddRoundCell(int col, int row, int count = 1)
+	private void AddRoundCell(int col, int row, short count = 1)
 	{
 		int xt = col + 1;
 		int yt = row + 1;
@@ -146,8 +146,9 @@ public class MineMapModel : ASingleton<MineMapModel>
 			{
 				if (i < 0 || j < 0 || i >= Cols || j >= Rows)
 					continue ;
-				if (originMap[i, j] < 100)
-					originMap[i, j] += (char)(count);
+				if (i == col && j == row)
+					continue ;
+				originMap[i, j] += count;
 			}
 		}
 		return ;
@@ -164,9 +165,9 @@ public class MineMapModel : ASingleton<MineMapModel>
 	{
 		StringBuilder sb = new StringBuilder();
 
-		for (int i = 0; i < Cols; i++)
+		for (int i = 0; i < Rows; i++)
 		{
-			for (int j = 0; j < Rows; j++)
+			for (int j = 0; j < Cols; j++)
 			{
 				sb.Append(GetCountResultAsChar(j, i));
 				sb.Append('.');
@@ -179,23 +180,22 @@ public class MineMapModel : ASingleton<MineMapModel>
 
 	public char GetCountResultAsChar(int y, int x)
 	{
-		char result;
+		char result = ' ';
+		short value;
 
-		if (IsOverMap(y, x))
-			throw (new Exception("맵의 범위를 넘어서는 접근"));
-		result = originMap[y, x];
-		if (result < 100)
-			result = (char)(result / 10 + result % 10 + '0');
-		else if (result == 100)
+		value = GetCellValue(y, x);
+		if (value < 100)
+			result = (char)(value % 100 / 10 + value % 10 + '0');
+		else if (value / 100 == 1)
 			result = 'm';
-		else if (result == 101)
+		else if (value / 100 == 2)
 			result = 'i';
-		else if (result == 102)
+		else if (value / 100 == 3)
 			result = 'n';
 		return (result);
 	}
 
-	public char GetCellValue(int y, int x)
+	public short GetCellValue(int y, int x)
 	{
 		if (IsOverMap(y, x))
 			throw (new Exception("맵의 범위를 넘어서는 접근"));
@@ -265,7 +265,7 @@ public class MineMapModel : ASingleton<MineMapModel>
 
 	public void OpenCellEvent(int y, int x)
 	{
-		char value;
+		short value;
 
 		if (IsOverMap(y, x) || !IsCellState(GetCellState(y, x), ECellState.Hidden))
 			return ;
