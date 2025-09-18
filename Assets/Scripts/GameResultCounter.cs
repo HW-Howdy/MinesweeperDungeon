@@ -25,6 +25,30 @@ public class GameResultCounter
 		countFloorClear = 0;
 		countFloorDeep = 0;
 		countUseMagic = 0;
-		return;
+		return ;
+	}
+
+	public void SaveCount()
+	{
+		PlayerPrefs.SetInt("countCellFound", countCellFound);
+		PlayerPrefs.SetInt("countCellMine", countCellMine);
+		PlayerPrefs.SetInt("countCellItem", countCellItem);
+		PlayerPrefs.SetInt("countFloorClear", countFloorClear);
+		PlayerPrefs.SetInt("countFloorDeep", countFloorDeep);
+		PlayerPrefs.SetInt("countUseMagic", countUseMagic);
+		return ;
+	}
+
+	public void LoadCount()
+	{
+		if (!PlayerPrefs.HasKey("countCellFound"))
+			return ;
+		PlayerPrefs.GetInt("countCellFound", countCellFound);
+		PlayerPrefs.GetInt("countCellMine", countCellMine);
+		PlayerPrefs.GetInt("countCellItem", countCellItem);
+		PlayerPrefs.GetInt("countFloorClear", countFloorClear);
+		PlayerPrefs.GetInt("countFloorDeep", countFloorDeep);
+		PlayerPrefs.GetInt("countUseMagic", countUseMagic);
+		return ;
 	}
 }

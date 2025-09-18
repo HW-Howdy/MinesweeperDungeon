@@ -52,6 +52,12 @@ public class EasingFillButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
 		return ;
 	}
 
+	public void SetActive(bool active)
+	{
+		gameObject.SetActive(active);
+		return ;
+	}
+
 	public void ChangeScene(int idx)
 	{
 		SceneManager.LoadScene(idx);

@@ -1197,8 +1197,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _gameStates:
-  - modeName: "\uB3C4\uC804"
-    modeDecs: "\uBAA9\uD45C\uB294 500\uCE35!"
+  - modeName: Challenge
     cols: 5
     rows: 5
     mineRatio: 0.15
@@ -1207,8 +1206,7 @@ MonoBehaviour:
     itemLow: 0.02
     floorNow: 0
     floorMax: 500
-  - modeName: "\uC26C\uC6C0"
-    modeDecs: "\uCD08\uC2EC\uC790\uB97C \uC704\uD55C \uAC04\uB2E8\uD55C \uBAA8\uB4DC"
+  - modeName: Easy
     cols: 5
     rows: 5
     mineRatio: 0.1
@@ -1217,9 +1215,7 @@ MonoBehaviour:
     itemLow: 0.1
     floorNow: 0
     floorMax: 10
-  - modeName: "\uBCF4\uD1B5"
-    modeDecs: "\uC9C0\uB8B0\uCC3E\uAE30\uC5D0 \uC775\uC219\uD55C \uC790\uB97C \uC704\uD55C
-      \uBAA8\uB4DC"
+  - modeName: Normal
     cols: 5
     rows: 5
     mineRatio: 0.15
@@ -1228,8 +1224,7 @@ MonoBehaviour:
     itemLow: 0.05
     floorNow: 0
     floorMax: 20
-  - modeName: "\uC5B4\uB824\uC6C0"
-    modeDecs: "\uB3C4\uC804\uC744 \uC990\uAE30\uB294 \uBD84\uC744 \uC704\uD55C \uBAA8\uB4DC"
+  - modeName: Hard
     cols: 5
     rows: 5
     mineRatio: 0.2

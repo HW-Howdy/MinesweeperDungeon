@@ -8,7 +8,6 @@ using UnityEngine;
 public struct SGameState
 {
 	public string modeName;
-	public string modeDecs;
 	public int cols;
 	public int rows;
 	public float mineRatio;
@@ -24,11 +23,11 @@ public class GameManager : ASingleton<GameManager>
 	public GameResultCounter counter;
 
 	[SerializeField]
-	private SGameState[]	_gameStates;
-	private SGameState		gameState;
-	public  SGameState		GameState { get => gameState; }
+	private SGameState[] _gameStates;
+	private SGameState gameState;
+	public SGameState GameState { get => gameState; }
 
-	private int		foundCellCommon;
+	private int foundCellCommon;
 
 	public Action ActionNextFloor;
 	public Action ActionOpenCellAfter;
@@ -37,13 +36,16 @@ public class GameManager : ASingleton<GameManager>
 	{
 		base.Awake();
 		counter = new GameResultCounter();
-		return ;
+		return;
 	}
 
 	public void Start()
 	{
-		StartNewGame(1);
-		return ;
+		if (PlayerPrefs.HasKey("gameMode"))
+			StartNewGame((short)PlayerPrefs.GetInt("gameMode"));
+		else
+			StartNewGame(1);
+		return;
 	}
 
 	public void StartNewGame(short gameMode)
@@ -53,7 +55,7 @@ public class GameManager : ASingleton<GameManager>
 		ActionNextFloor = null;
 		NextFloor();
 		SetFloorNext(gameMode);
-		return ;
+		return;
 	}
 
 	private void SetFloorNext(short gameMode)
@@ -63,10 +65,10 @@ public class GameManager : ASingleton<GameManager>
 		else if (gameMode == 1)
 			ActionNextFloor = () => NextFloorEasy();
 		else if (gameMode == 2)
-			ActionNextFloor = () => NextFloorMiddle();
+			ActionNextFloor = () => NextFloorNormal();
 		else if (gameMode == 3)
 			ActionNextFloor = () => NextFloorHard();
-		return ;
+		return;
 	}
 
 	private void NextFloorEasy()
@@ -80,10 +82,10 @@ public class GameManager : ASingleton<GameManager>
 			gameState.cols += 1;
 			gameState.rows += 1;
 		}
-		return ;
+		return;
 	}
 
-	private void NextFloorMiddle()
+	private void NextFloorNormal()
 	{
 		if (gameState.mineRatio < gameState.mineHigh)
 			gameState.mineRatio += 0.01f;
@@ -94,7 +96,7 @@ public class GameManager : ASingleton<GameManager>
 			gameState.cols += 1;
 			gameState.rows += 1;
 		}
-		return ;
+		return;
 	}
 
 	private void NextFloorHard()
@@ -108,7 +110,7 @@ public class GameManager : ASingleton<GameManager>
 			gameState.cols += 2;
 			gameState.rows += 2;
 		}
-		return ;
+		return;
 	}
 
 	private void NextFloorChallenge()
@@ -122,7 +124,7 @@ public class GameManager : ASingleton<GameManager>
 			gameState.cols += (gameState.floorNow / 20) + 1;
 			gameState.rows += (gameState.floorNow / 20) + 1;
 		}
-		return ;
+		return;
 	}
 
 	/*
@@ -151,12 +153,12 @@ public class GameManager : ASingleton<GameManager>
 			foundCellCommon++;
 			if (foundCellCommon == MineMapModel.Instance.CommonCellCount)
 			{
-				Debug.Log("Clear Floor!");
+				//Debug.Log("Clear Floor!");
 			}
 		}
 		counter.countCellFound++;
 		ActionOpenCellAfter?.Invoke();
-		return ;
+		return;
 	}
 
 	public void NextFloor()
@@ -164,15 +166,15 @@ public class GameManager : ASingleton<GameManager>
 		counter.countFloorDeep = ++gameState.floorNow;
 		if (gameState.floorNow > gameState.floorMax)
 		{
-			Debug.Log("Game Clear!");
+			//Debug.Log("Game Clear!");
 		}
 		else
 		{
 			ActionNextFloor?.Invoke();
 			MineMapModel.Instance.SetupMap(gameState.rows, gameState.cols, gameState.mineRatio, gameState.itemRatio);
-			Debug.Log(gameState.floorNow);
+			//Debug.Log(gameState.floorNow);
 		}
 		foundCellCommon = 0;
-		return ;
+		return;
 	}
 }
