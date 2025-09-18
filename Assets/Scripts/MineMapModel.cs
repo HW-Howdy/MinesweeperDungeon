@@ -29,6 +29,7 @@ public class MineMapModel : ASingleton<MineMapModel>
 	public int Cols { get; private set; }
 	public int Rows { get; private set; }
 	public int RareCellCount { get; private set; }
+	public int CommonCellCount { get; private set; }
 	public int Length { get => Rows * Cols; }
 
 	public Action ActionResizeMapAfter;
@@ -132,6 +133,7 @@ public class MineMapModel : ASingleton<MineMapModel>
 			}
 		}
 		RareCellCount = mine + item + 1;
+		CommonCellCount = originMap.Length - RareCellCount;
 		return ;
 	}
 

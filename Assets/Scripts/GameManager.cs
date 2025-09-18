@@ -28,6 +28,8 @@ public class GameManager : ASingleton<GameManager>
 	private SGameState		gameState;
 	public  SGameState		GameState { get => gameState; }
 
+	private int		foundCellCommon;
+
 	public Action ActionNextFloor;
 	public Action ActionOpenCellAfter;
 
@@ -73,7 +75,7 @@ public class GameManager : ASingleton<GameManager>
 			gameState.mineRatio += 0.01f;
 		if (gameState.itemRatio > gameState.itemLow)
 			gameState.itemRatio -= 0.01f;
-		if (gameState.floorNow / 5 == 0)
+		if (gameState.floorNow % 5 == 1)
 		{
 			gameState.cols += 1;
 			gameState.rows += 1;
@@ -87,7 +89,7 @@ public class GameManager : ASingleton<GameManager>
 			gameState.mineRatio += 0.01f;
 		if (gameState.itemRatio > gameState.itemLow)
 			gameState.itemRatio -= 0.01f;
-		if (gameState.floorNow / 5 == 1)
+		if (gameState.floorNow % 5 == 1)
 		{
 			gameState.cols += 1;
 			gameState.rows += 1;
@@ -101,7 +103,7 @@ public class GameManager : ASingleton<GameManager>
 			gameState.mineRatio += 0.01f;
 		if (gameState.itemRatio > gameState.itemLow)
 			gameState.itemRatio -= 0.01f;
-		if (gameState.floorNow / 5 == 1)
+		if (gameState.floorNow % 5 == 1)
 		{
 			gameState.cols += 2;
 			gameState.rows += 2;
@@ -144,6 +146,14 @@ public class GameManager : ASingleton<GameManager>
 		{
 			NextFloor();
 		}
+		else
+		{
+			foundCellCommon++;
+			if (foundCellCommon == MineMapModel.Instance.CommonCellCount)
+			{
+				Debug.Log("Clear Floor!");
+			}
+		}
 		counter.countCellFound++;
 		ActionOpenCellAfter?.Invoke();
 		return ;
@@ -151,16 +161,18 @@ public class GameManager : ASingleton<GameManager>
 
 	public void NextFloor()
 	{
-		if (++gameState.floorNow > gameState.floorMax)
+		counter.countFloorDeep = ++gameState.floorNow;
+		if (gameState.floorNow > gameState.floorMax)
 		{
-
+			Debug.Log("Game Clear!");
 		}
 		else
 		{
 			ActionNextFloor?.Invoke();
 			MineMapModel.Instance.SetupMap(gameState.rows, gameState.cols, gameState.mineRatio, gameState.itemRatio);
+			Debug.Log(gameState.floorNow);
 		}
-		counter.countFloorDeep = gameState.floorNow;
+		foundCellCommon = 0;
 		return ;
 	}
 }
