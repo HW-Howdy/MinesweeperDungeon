@@ -1,9 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
+using UnitySubCore.Singleton;
 
 /*
  * 0-8		=> 근처 함정의 수
@@ -21,7 +19,7 @@ public enum ECellState : byte
 	FlagBlue =	0b0000_0100,
 }
 
-public class MineMapModel : ASingleton<MineMapModel>
+public class MineMapModel : AMonoSingleton<MineMapModel>
 {
 	private short[,] originMap;
 	private ECellState[,] stateMap;

@@ -1,12 +1,8 @@
-using Easing;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnitySubCore.Easing;
 
 public class EasingFillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -47,7 +43,7 @@ public class EasingFillButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
 				nowTime = _fillTime;
 		}
 		easingTime = nowTime / _fillTime;
-		easingScale = EasingFunctions.EasingByType(EasingFunctions.EFunctionTypes.InOutCubic, easingTime) * _targetScale;
+		easingScale = SCEasing.EasingByType(EEasingType.InOutCubic, easingTime) * _targetScale;
 		_fillObject.sizeDelta = new Vector2(originTransform.sizeDelta.x * easingScale, originTransform.sizeDelta.y);
 		return ;
 	}

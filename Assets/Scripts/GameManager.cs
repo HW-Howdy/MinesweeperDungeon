@@ -1,8 +1,6 @@
 using System;
-using System.Runtime.InteropServices.WindowsRuntime;
-using UnityEditor.Experimental.GraphView;
-using UnityEditorInternal;
 using UnityEngine;
+using UnitySubCore.Singleton;
 
 [Serializable]
 public struct SGameState
@@ -18,7 +16,7 @@ public struct SGameState
 	public short floorMax;
 }
 
-public class GameManager : ASingleton<GameManager>
+public class GameManager : AMonoSingleton<GameManager>
 {
 	public GameResultCounter counter;
 

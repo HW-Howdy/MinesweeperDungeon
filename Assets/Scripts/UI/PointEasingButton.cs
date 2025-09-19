@@ -1,12 +1,7 @@
-using Easing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnitySubCore.Easing;
 
 public class PointEasingButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
@@ -39,7 +34,7 @@ public class PointEasingButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 				easingTime = (2 * scaleTime - nowTime) / scaleTime;
 			else
 				easingTime = nowTime / scaleTime;
-			easingScale = EasingFunctions.EasingByType(EasingFunctions.EFunctionTypes.InOutCubic, easingTime);
+			easingScale = SCEasing.EasingByType(EEasingType.InOutCubic, easingTime);
 			transform.localScale = Vector3.Lerp(sizeOrigin, sizeTarget, easingScale);
 		}
 		return ;

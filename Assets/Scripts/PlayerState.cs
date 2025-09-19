@@ -1,6 +1,7 @@
 using UnityEngine;
+using UnitySubCore.Singleton;
 
-public class PlayerState : ASingleton<PlayerState>
+public class PlayerState : AMonoSingleton<PlayerState>
 {
 	private int healthCurrent;
 	private int healthMax;
