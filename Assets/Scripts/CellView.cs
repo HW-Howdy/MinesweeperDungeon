@@ -8,7 +8,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class CellModel : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
+public class CellView : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
 {
 	private int x;
 	private int y;
