@@ -45,8 +45,15 @@ public class CellView : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 	{
 		if (IsCellState(state, ECellState.Open))
 		{
-			_background.color = Color.white;
 			_text.text = MineMapModel.Instance.GetCountResultAsChar(y, x).ToString();
+			if (_text.text.Equals("m"))
+				_background.color = Color.magenta;
+			else if (_text.text.Equals("i"))
+				_background.color = Color.cyan;
+			else if (_text.text.Equals("n"))
+				_background.color = Color.green;
+			else
+				_background.color = Color.white;
 		}
 		else if (IsCellState(state, ECellState.FlagRed))
 		{

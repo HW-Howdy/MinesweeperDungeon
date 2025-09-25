@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnitySubCore.Singleton;
 
@@ -52,6 +53,9 @@ public class GameManager : AMonoSingleton<GameManager>
 		counter.Clear();
 		gameState = _gameStates[gameMode];
 		ActionNextFloor = null;
+		PlayerState.Instance.SetHealth(6);
+		PlayerState.Instance.SetMana(4);
+		PlayerState.Instance.SpendMana(4);
 		NextFloor();
 		SetFloorNext(gameMode);
 		return;
@@ -137,10 +141,12 @@ public class GameManager : AMonoSingleton<GameManager>
 	{
 		if (value / 100 == 1)
 		{
+			PlayerState.Instance.RemoveHealth(1);
 			counter.countCellMine++;
 		}
 		else if (value / 100 == 2)
 		{
+			PlayerState.Instance.AddMana(1);
 			counter.countCellItem++;
 		}
 		else if (value / 100 == 3)
