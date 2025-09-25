@@ -51,7 +51,7 @@ namespace UnitySubCore.Singleton
 			{
 				Destroy(gameObject);
 			}
-			return;
+			return ;
 		}
 
 		private void OnApplicationQuit()

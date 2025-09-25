@@ -50,7 +50,7 @@ public class GameModeSelecterUI : MonoBehaviour
 	public void SelectGameMode(int gameMode)
 	{
 		PlayerPrefs.SetInt("gameMode", gameMode);
-		SceneManager.LoadScene(1);
+		SceneFader.Instance.LoadSceneWithFade(1);
 		return ;
 	}
 }
