@@ -94,7 +94,7 @@ public class GameManager : AMonoSingleton<GameManager>
 			gameState.mineRatio += 0.01f;
 		if (gameState.itemRatio > gameState.itemLow)
 			gameState.itemRatio -= 0.01f;
-		if (gameState.floorNow % 5 == 1)
+		if (gameState.floorNow % 2 == 1)
 		{
 			gameState.cols += 1;
 			gameState.rows += 1;
@@ -108,10 +108,10 @@ public class GameManager : AMonoSingleton<GameManager>
 			gameState.mineRatio += 0.01f;
 		if (gameState.itemRatio > gameState.itemLow)
 			gameState.itemRatio -= 0.01f;
-		if (gameState.floorNow % 5 == 1)
+		if (gameState.cols <= 20)
 		{
-			gameState.cols += 2;
-			gameState.rows += 2;
+			gameState.cols += 1;
+			gameState.rows += 1;
 		}
 		return;
 	}
@@ -122,10 +122,10 @@ public class GameManager : AMonoSingleton<GameManager>
 			gameState.mineRatio += 0.01f;
 		if (gameState.itemRatio > gameState.itemLow)
 			gameState.itemRatio -= 0.01f;
-		if (gameState.floorNow / 5 == 1)
+		if (gameState.cols <= 100)
 		{
-			gameState.cols += (gameState.floorNow / 20) + 1;
-			gameState.rows += (gameState.floorNow / 20) + 1;
+			gameState.cols += 1;
+			gameState.rows += 1;
 		}
 		return;
 	}
@@ -158,7 +158,7 @@ public class GameManager : AMonoSingleton<GameManager>
 			foundCellCommon++;
 			if (foundCellCommon == MineMapModel.Instance.CommonCellCount)
 			{
-				//Debug.Log("Clear Floor!");
+				Debug.Log("Clear Floor!");
 			}
 		}
 		counter.countCellFound++;
@@ -169,17 +169,27 @@ public class GameManager : AMonoSingleton<GameManager>
 	public void NextFloor()
 	{
 		counter.countFloorDeep = ++gameState.floorNow;
-		if (gameState.floorNow > gameState.floorMax)
+		if (gameState.floorNow == 1)
 		{
-			//Debug.Log("Game Clear!");
+			MineMapModel.Instance.SetupMap(gameState.rows, gameState.cols, gameState.mineRatio, gameState.itemRatio);
+		}
+		else if (gameState.floorNow > gameState.floorMax)
+		{
+			EndGame();
 		}
 		else
 		{
 			ActionNextFloor?.Invoke();
-			MineMapModel.Instance.SetupMap(gameState.rows, gameState.cols, gameState.mineRatio, gameState.itemRatio);
-			//Debug.Log(gameState.floorNow);
+			SceneFader.Instance.StartFade(0.3f, () => MineMapModel.Instance.SetupMap(gameState.rows, gameState.cols, gameState.mineRatio, gameState.itemRatio));
 		}
 		foundCellCommon = 0;
 		return;
+	}
+
+	public void EndGame()
+	{
+		counter.SaveCount();
+		SceneFader.Instance.LoadSceneWithFade(2);
+		return ;
 	}
 }

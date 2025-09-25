@@ -10,8 +10,6 @@ public class SceneFader : AMonoSingleton<SceneFader>
 {
 	[SerializeField]
 	private Image _fadeImage;
-	[SerializeField]
-	private float _fadeDuration = 1f;
 
 	private Coroutine fadeRoutine;
 
@@ -42,24 +40,47 @@ public class SceneFader : AMonoSingleton<SceneFader>
 			rect.anchorMin = Vector3.zero;
 			rect.anchorMax = Vector3.one;
 			_fadeImage.color = Color.black;
-			_fadeDuration = 1f;
 		}
 		return ;
 	}
 
-	public void StartFadeIn()
+	public void StartFadeIn(float second = 1f, Action callback = null)
 	{
 		if (fadeRoutine != null)
 			StopCoroutine(fadeRoutine);
-		fadeRoutine = StartCoroutine(FadeIn());
+		fadeRoutine = StartCoroutine(FadeIn(second, callback));
 		return ;
 	}
 
-	public void StartFadeOut()
+	public void StartFadeOut(float second = 1f, Action callback = null)
 	{
 		if (fadeRoutine != null)
 			StopCoroutine(fadeRoutine);
-		fadeRoutine = StartCoroutine(FadeOut());
+		fadeRoutine = StartCoroutine(FadeOut(second, callback));
+		return ;
+	}
+
+	public void LoadSceneWithFade(string sceneName, float second = 1f, Action callback = null)
+	{
+		if (fadeRoutine != null)
+			StopCoroutine(fadeRoutine);
+		fadeRoutine = StartCoroutine(FadeAndLoad(sceneName, second, callback));
+		return ;
+	}
+
+	public void LoadSceneWithFade(int idx, float second = 1f, Action callback = null)
+	{
+		if (fadeRoutine != null)
+			StopCoroutine(fadeRoutine);
+		fadeRoutine = StartCoroutine(FadeAndLoad(idx, second, callback));
+		return ;
+	}
+
+	public void StartFade(float second = 1f, Action callFade = null, Action callback = null)
+	{
+		if (fadeRoutine != null)
+			StopCoroutine(fadeRoutine);
+		fadeRoutine = StartCoroutine(Fade(second, callFade, callback));
 		return ;
 	}
 
@@ -69,46 +90,58 @@ public class SceneFader : AMonoSingleton<SceneFader>
 
 		c.a = alpha;
 		_fadeImage.color = c;
-		return ;
+		return;
 	}
 
-	public void LoadSceneWithFade(string sceneName)
+	private IEnumerator Fade(float second, Action callFade, Action callback)
 	{
-		StartCoroutine(FadeAndLoad(sceneName));
-		return ;
+		yield return FadeOut(second, callFade);
+		yield return FadeIn(second, callback);
+		yield break;
 	}
-
-	public void LoadSceneWithFade(int idx)
+	private IEnumerator FadeAndLoad(string sceneName, float second, Action callback)
 	{
-		StartCoroutine(FadeAndLoad(idx));
-		return ;
+		yield return FadeOut(second);
+		yield return LoadScene(sceneName);
+		yield return FadeIn(second, callback);
+		yield break;
 	}
 
-	private IEnumerator FadeOut()
+	private IEnumerator FadeAndLoad(int idx, float second, Action callback)
+	{
+		yield return FadeOut(second);
+		yield return LoadScene(idx);
+		yield return FadeIn(second, callback);
+		yield break;
+	}
+
+	private IEnumerator FadeOut(float second, Action callback = null)
 	{
 		float t = 0f;
 
-		while (t < _fadeDuration)
+		while (t < second)
 		{
 			t += Time.deltaTime;
-			float alpha = Mathf.Clamp01(t / _fadeDuration);
+			float alpha = Mathf.Clamp01(t / second);
 			SetAlpha(alpha);
 			yield return (null);
 		}
+		callback?.Invoke();
 		yield break ;
 	}
 
-	private IEnumerator FadeIn()
+	private IEnumerator FadeIn(float second, Action callback = null)
 	{
 		float t = 0f;
 
-		while (t < _fadeDuration)
+		while (t < second)
 		{
 			t += Time.deltaTime;
-			float alpha = 1f - Mathf.Clamp01(t / _fadeDuration);
+			float alpha = 1f - Mathf.Clamp01(t / second);
 			SetAlpha(alpha);
 			yield return (null);
 		}
+		callback?.Invoke();
 		yield break ;
 	}
 
@@ -121,22 +154,6 @@ public class SceneFader : AMonoSingleton<SceneFader>
 	private IEnumerator LoadScene(int idx)
 	{
 		SceneManager.LoadScene(idx);
-		yield break ;
-	}
-
-	private IEnumerator FadeAndLoad(string sceneName)
-	{
-		yield return FadeOut();
-		yield return LoadScene(sceneName);
-		yield return FadeIn();
-		yield break ;
-	}
-	
-	private IEnumerator FadeAndLoad(int idx)
-	{
-		yield return FadeOut();
-		yield return LoadScene(idx);
-		yield return FadeIn();
 		yield break ;
 	}
 }
