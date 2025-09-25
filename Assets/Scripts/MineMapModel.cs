@@ -11,6 +11,14 @@ using UnitySubCore.Singleton;
  * 300		=> 다음층 n
  */
 
+public enum ECellValue : short
+{
+	None = 0,
+	Mine = 100,
+	Item = 200,
+	Next = 300,
+}
+
 public enum ECellState : byte
 {
 	Hidden =	0b0000_0000,

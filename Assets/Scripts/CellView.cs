@@ -83,6 +83,10 @@ public class CellView : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 	{
 		if (IsCellState(state, ECellState.Open))
 		{
+			if (eventData.button == PointerEventData.InputButton.Left && MineMapModel.Instance.GetCountResultAsChar(y, x) == 'n')
+			{
+				GameManager.Instance.ActionQuestNextFloor?.Invoke();
+			}
 			if (eventData.button == PointerEventData.InputButton.Left && eventData.clickCount == 2)
 			{
 				if (MineMapModel.Instance.CheckAround(y, x))

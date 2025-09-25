@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using UnitySubCore;
 using UnitySubCore.Easing;
 
-public class GameModeSelecterUI : MonoBehaviour
+public class NextFloorUI : MonoBehaviour
 {
 	[SerializeField]
 	private GameObject UI;
@@ -22,35 +22,41 @@ public class GameModeSelecterUI : MonoBehaviour
 	{
 		rectUI = UI.GetComponent<RectTransform>();
 		originSize = rectUI.sizeDelta;
-		return ;
+		GameManager.Instance.ActionQuestNextFloor += SetActiveTrue;
+		return;
 	}
 
 	public void Update()
 	{
 		Resize();
-		return ;
+		return;
 	}
 
 	public void Resize()
 	{
-		nowTime += (- 1 + 2 * Convert.ToInt32(isActive)) * Time.deltaTime;
+		nowTime += (-1 + 2 * Convert.ToInt32(isActive)) * Time.deltaTime;
 		nowTime = Mathf.Clamp(nowTime, 0f, showTime);
 
 		float easing = SCEasing.EasingByType(EEasingType.InOutQuad, nowTime / showTime);
 		rectUI.localScale = easing * Vector2.one;
+		return;
+	}
+
+	public void SetActiveTrue()
+	{
+		isActive = true;
+		return ;
+	}
+
+	public void NextFloor()
+	{
+		GameManager.Instance.NextFloor();
 		return ;
 	}
 
 	public void Active(bool isActive)
 	{
 		this.isActive = isActive;
-		return ;
-	}
-
-	public void SelectGameMode(int gameMode)
-	{
-		PlayerPrefs.SetInt("gameMode", gameMode);
-		SceneFader.Instance.LoadSceneWithFade(1);
 		return ;
 	}
 }

@@ -57,6 +57,7 @@ public class MineMapViewer : MonoBehaviour
 		_inputFieldCellSize.text = cellSize.ToString();
 		// Content 크기를 전체 데이터 크기에 맞춤
 		_content.sizeDelta = new Vector2(MineMapModel.Instance.Cols * cellSize, MineMapModel.Instance.Rows * cellSize);
+		_content.localPosition = Vector2.zero;
 
 		// Viewport에 보이는 셀 개수 계산 (+1 여유)
 		RectTransform viewport = _scrollRect.viewport;

@@ -28,6 +28,7 @@ public class GameManager : AMonoSingleton<GameManager>
 	private int foundCellCommon;
 
 	public Action ActionNextFloor;
+	public Action ActionQuestNextFloor;
 	public Action ActionOpenCellAfter;
 
 	protected override void Awake()
@@ -144,7 +145,7 @@ public class GameManager : AMonoSingleton<GameManager>
 		}
 		else if (value / 100 == 3)
 		{
-			NextFloor();
+			ActionQuestNextFloor?.Invoke();
 		}
 		else
 		{

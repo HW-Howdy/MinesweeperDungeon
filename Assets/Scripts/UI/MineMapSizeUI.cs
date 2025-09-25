@@ -5,7 +5,7 @@ public class MineMapSizeUI : MonoBehaviour
 {
 	public TMP_Text tmp;
 
-	public void Start()
+	public void Awake()
 	{
 		MineMapModel.Instance.ActionResizeMapAfter += UpdateUI;
 		return ;
