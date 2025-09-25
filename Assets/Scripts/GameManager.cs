@@ -29,6 +29,7 @@ public class GameManager : AMonoSingleton<GameManager>
 	private int foundCellCommon;
 
 	public Action ActionNextFloor;
+	public Action<int, int> ActionAfterUpdateFloor;
 	public Action ActionQuestNextFloor;
 	public Action ActionOpenCellAfter;
 
@@ -158,6 +159,8 @@ public class GameManager : AMonoSingleton<GameManager>
 			foundCellCommon++;
 			if (foundCellCommon == MineMapModel.Instance.CommonCellCount)
 			{
+				SceneFader.Instance.SetColor(Color.white);
+				SceneFader.Instance.StartFade(0.2f);
 				Debug.Log("Clear Floor!");
 			}
 		}
@@ -180,8 +183,10 @@ public class GameManager : AMonoSingleton<GameManager>
 		else
 		{
 			ActionNextFloor?.Invoke();
+			SceneFader.Instance.SetColor(Color.black);
 			SceneFader.Instance.StartFade(0.3f, () => MineMapModel.Instance.SetupMap(gameState.rows, gameState.cols, gameState.mineRatio, gameState.itemRatio));
 		}
+		ActionAfterUpdateFloor?.Invoke(gameState.floorNow, gameState.floorMax);
 		foundCellCommon = 0;
 		return;
 	}
@@ -189,6 +194,7 @@ public class GameManager : AMonoSingleton<GameManager>
 	public void EndGame()
 	{
 		counter.SaveCount();
+		SceneFader.Instance.SetColor(Color.black);
 		SceneFader.Instance.LoadSceneWithFade(2);
 		return ;
 	}

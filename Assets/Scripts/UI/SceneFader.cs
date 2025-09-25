@@ -84,6 +84,13 @@ public class SceneFader : AMonoSingleton<SceneFader>
 		return ;
 	}
 
+	public Color SetColor(Color color)
+	{
+		color.a = _fadeImage.color.a;
+		_fadeImage.color = color;
+		return (color);
+	}
+
 	private void SetAlpha(float alpha)
 	{
 		Color c = _fadeImage.color;
