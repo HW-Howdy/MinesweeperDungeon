@@ -13,6 +13,7 @@ public class CellView : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 	private int x;
 	private int y;
 	private ECellState state;
+	private bool canActClickEvent;
 
 	[SerializeField]
 	private Image _background;
@@ -24,6 +25,12 @@ public class CellView : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 	public static Action ActionAfterClick;
 	public static Action<short> ActionPointerEnter;
 	public static Action ActionPointerExit;
+
+	public void SetAct(bool act)
+	{
+		canActClickEvent = act;
+		return ;
+	}
 
 	public void SetLocate(int y, int x)
 	{
@@ -88,6 +95,8 @@ public class CellView : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 
 	public void OnPointerClick(PointerEventData eventData)
 	{
+		if (!canActClickEvent)
+			return ;
 		if (IsCellState(state, ECellState.Open))
 		{
 			if (eventData.button == PointerEventData.InputButton.Left && MineMapModel.Instance.GetCountResultAsChar(y, x) == 'n')

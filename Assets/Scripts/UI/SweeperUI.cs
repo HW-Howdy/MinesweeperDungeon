@@ -12,6 +12,13 @@ public class SweeperUI : MonoBehaviour
 		return ;
 	}
 
+	public void OnDestroy()
+	{
+		CellView.ActionPointerEnter -= UpdateUI;
+		CellView.ActionPointerExit -= RemoveUI;
+		return ;
+	}
+
 	public void UpdateUI(short value)
 	{
 		value %= 100;

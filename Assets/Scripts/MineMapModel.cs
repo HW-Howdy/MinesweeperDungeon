@@ -32,6 +32,8 @@ public class MineMapModel : AMonoSingleton<MineMapModel>
 	private short[,] originMap;
 	private ECellState[,] stateMap;
 
+	public bool canOpen = true;
+
 	public int Cols { get; private set; }
 	public int Rows { get; private set; }
 	public int RareCellCount { get; private set; }

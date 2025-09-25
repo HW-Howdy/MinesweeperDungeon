@@ -142,13 +142,16 @@ public class GameManager : AMonoSingleton<GameManager>
 	{
 		if (value / 100 == 1)
 		{
-			PlayerState.Instance.RemoveHealth(1);
 			counter.countCellMine++;
+			if (PlayerState.Instance.RemoveHealth(1) <= 0)
+			{
+				EndGame();
+			}
 		}
 		else if (value / 100 == 2)
 		{
-			PlayerState.Instance.AddMana(1);
 			counter.countCellItem++;
+			PlayerState.Instance.AddMana(1);
 		}
 		else if (value / 100 == 3)
 		{
@@ -171,6 +174,8 @@ public class GameManager : AMonoSingleton<GameManager>
 
 	public void NextFloor()
 	{
+		if (!MineMapModel.Instance.canOpen)
+			return ;
 		counter.countFloorDeep = ++gameState.floorNow;
 		if (gameState.floorNow == 1)
 		{
@@ -194,6 +199,7 @@ public class GameManager : AMonoSingleton<GameManager>
 	public void EndGame()
 	{
 		counter.SaveCount();
+		MineMapModel.Instance.canOpen = false;
 		SceneFader.Instance.SetColor(Color.black);
 		SceneFader.Instance.LoadSceneWithFade(2);
 		return ;
