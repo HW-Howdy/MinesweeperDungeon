@@ -1,5 +1,5 @@
 using System;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 using UnitySubCore.Singleton;
 
@@ -17,6 +17,20 @@ public struct SGameState
 	public short floorMax;
 }
 
+[Serializable]
+public struct SMineState
+{
+	public int damage;
+	public Color color;
+
+	public void SetValue(int damage, Color color)
+	{
+		this.damage = damage;
+		this.color = color;
+		return ;
+	}
+}
+
 public class GameManager : AMonoSingleton<GameManager>
 {
 	public GameResultCounter counter;
@@ -26,7 +40,8 @@ public class GameManager : AMonoSingleton<GameManager>
 	private SGameState gameState;
 	public SGameState GameState { get => gameState; }
 
-	private int foundCellCommon;
+	private SMineState[]	mineState = new SMineState[3];
+	private int				foundCellCommon;
 
 	public Action ActionNextFloor;
 	public Action<int, int> ActionAfterUpdateFloor;
@@ -36,6 +51,9 @@ public class GameManager : AMonoSingleton<GameManager>
 	protected override void Awake()
 	{
 		base.Awake();
+		mineState[0].SetValue(0, Color.magenta);
+		mineState[1].SetValue(0, Color.cyan);
+		mineState[2].SetValue(0, Color.yellow);
 		counter = new GameResultCounter();
 		return;
 	}
@@ -56,7 +74,6 @@ public class GameManager : AMonoSingleton<GameManager>
 		ActionNextFloor = null;
 		PlayerState.Instance.SetHealth(6);
 		PlayerState.Instance.SetMana(4);
-		PlayerState.Instance.SpendMana(4);
 		NextFloor();
 		SetFloorNext(gameMode);
 		return;
@@ -142,11 +159,12 @@ public class GameManager : AMonoSingleton<GameManager>
 	{
 		if (value / 100 == 1)
 		{
+			int mine = UnityEngine.Random.Range(0, mineState.Length);
+
 			counter.countCellMine++;
-			if (PlayerState.Instance.RemoveHealth(1) <= 0)
-			{
-				EndGame();
-			}
+			MineMapModel.Instance.canOpen = false;
+			SceneFader.Instance.SetColor(mineState[mine].color);
+			SceneFader.Instance.StartFade(0.15f, null, () => Damage(mine));
 		}
 		else if (value / 100 == 2)
 		{
@@ -170,6 +188,17 @@ public class GameManager : AMonoSingleton<GameManager>
 		counter.countCellFound++;
 		ActionOpenCellAfter?.Invoke();
 		return;
+	}
+
+	public void Damage(int mine)
+	{
+		if (PlayerState.Instance.RemoveHealth(++mineState[mine].damage) <= 0)
+		{
+			EndGame();
+			return ;
+		}
+		MineMapModel.Instance.canOpen = true;
+		return ;
 	}
 
 	public void NextFloor()
@@ -199,7 +228,6 @@ public class GameManager : AMonoSingleton<GameManager>
 	public void EndGame()
 	{
 		counter.SaveCount();
-		MineMapModel.Instance.canOpen = false;
 		SceneFader.Instance.SetColor(Color.black);
 		SceneFader.Instance.LoadSceneWithFade(2);
 		return ;
