@@ -38,10 +38,11 @@ public class GameManager : AMonoSingleton<GameManager>
 	[SerializeField]
 	private SGameState[] _gameStates;
 	private SGameState gameState;
-	public SGameState GameState { get => gameState; }
 
 	private SMineState[]	mineState = new SMineState[3];
 	private int				foundCellCommon;
+	public SGameState GameState { get => gameState; }
+	public SMineState[] MineState { get => mineState; }
 
 	public Action ActionNextFloor;
 	public Action<int, int> ActionAfterUpdateFloor;
@@ -51,9 +52,9 @@ public class GameManager : AMonoSingleton<GameManager>
 	protected override void Awake()
 	{
 		base.Awake();
-		mineState[0].SetValue(0, Color.magenta);
-		mineState[1].SetValue(0, Color.cyan);
-		mineState[2].SetValue(0, Color.yellow);
+		mineState[0].SetValue(1, Color.magenta);
+		mineState[1].SetValue(1, Color.cyan);
+		mineState[2].SetValue(1, Color.yellow);
 		counter = new GameResultCounter();
 		return;
 	}
@@ -192,12 +193,13 @@ public class GameManager : AMonoSingleton<GameManager>
 
 	public void Damage(int mine)
 	{
-		if (PlayerState.Instance.RemoveHealth(++mineState[mine].damage) <= 0)
+		if (PlayerState.Instance.RemoveHealth(mineState[mine].damage++) <= 0)
 		{
 			EndGame();
 			return ;
 		}
 		MineMapModel.Instance.canOpen = true;
+		ActionOpenCellAfter?.Invoke();
 		return ;
 	}
 
