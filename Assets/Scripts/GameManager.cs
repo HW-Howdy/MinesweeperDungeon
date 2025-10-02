@@ -229,6 +229,7 @@ public class GameManager : AMonoSingleton<GameManager>
 
 	public void EndGame()
 	{
+		MineMapModel.Instance.canOpen = false;
 		counter.SaveCount();
 		SceneFader.Instance.SetColor(Color.black);
 		SceneFader.Instance.LoadSceneWithFade(2);

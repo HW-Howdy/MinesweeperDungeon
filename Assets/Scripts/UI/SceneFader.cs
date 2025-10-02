@@ -12,6 +12,8 @@ public class SceneFader : AMonoSingleton<SceneFader>
 	private Image _fadeImage;
 
 	private Coroutine fadeRoutine;
+	private Queue<IEnumerator> fadeQueue = new Queue<IEnumerator>();
+	private bool isFading = false;
 
 	protected override void Awake()
 	{
@@ -44,43 +46,66 @@ public class SceneFader : AMonoSingleton<SceneFader>
 		return ;
 	}
 
+	private void EnqueueFade(IEnumerator routine)
+	{
+		fadeQueue.Enqueue(routine);
+		if (!isFading)
+		{
+			ProcessNext();
+		}
+		return ;
+	}
+
+	private void ProcessNext()
+	{
+		if (fadeQueue.Count > 0)
+		{
+			isFading = true;
+			fadeRoutine = StartCoroutine(RunFade(fadeQueue.Dequeue()));
+		}
+		else
+		{
+			isFading = false;
+			fadeRoutine = null;
+		}
+		return ;
+	}
+
+	private IEnumerator RunFade(IEnumerator routine)
+	{
+		yield return StartCoroutine(routine);
+		isFading = false;
+		ProcessNext();
+		yield break ;
+	}
+
 	public void StartFadeIn(float second = 1f, Action callback = null)
 	{
-		if (fadeRoutine != null)
-			StopCoroutine(fadeRoutine);
-		fadeRoutine = StartCoroutine(FadeIn(second, callback));
+		EnqueueFade(FadeIn(second, callback));
 		return ;
 	}
 
 	public void StartFadeOut(float second = 1f, Action callback = null)
 	{
-		if (fadeRoutine != null)
-			StopCoroutine(fadeRoutine);
-		fadeRoutine = StartCoroutine(FadeOut(second, callback));
-		return ;
+		EnqueueFade(FadeOut(second, callback));
+		return;
 	}
 
 	public void LoadSceneWithFade(string sceneName, float second = 1f, Action callback = null)
 	{
-		if (fadeRoutine != null)
-			StopCoroutine(fadeRoutine);
-		fadeRoutine = StartCoroutine(FadeAndLoad(sceneName, second, callback));
+		EnqueueFade(FadeAndLoad(sceneName, second, callback));
 		return ;
 	}
 
 	public void LoadSceneWithFade(int idx, float second = 1f, Action callback = null)
 	{
-		if (fadeRoutine != null)
-			StopCoroutine(fadeRoutine);
-		fadeRoutine = StartCoroutine(FadeAndLoad(idx, second, callback));
+		EnqueueFade(FadeAndLoad(idx, second, callback));
 		return ;
 	}
 
 	public void StartFade(float second = 1f, Action callFade = null, Action callback = null)
 	{
-		if (fadeRoutine != null)
-			StopCoroutine(fadeRoutine);
-		fadeRoutine = StartCoroutine(Fade(second, callFade, callback));
+		EnqueueFade(Fade(second, callFade, callback));
 		return ;
 	}
 

@@ -296,8 +296,14 @@ public class MineMapModel : AMonoSingleton<MineMapModel>
 
 	public bool CheckAround(int y, int x)
 	{
-		bool result = (CountAroundFlag(y, x) == (byte)(GetCountResultAsChar(y, x) - '0'));
+		short value = GetCellValue(y, x);
+		byte flag = CountAroundFlag(y, x);
+		bool result;
 
+		if (value < 100)
+			result = (flag == (byte)(GetCountResultAsChar(y, x) - '0'));
+		else
+			result = (flag == value / 10 % 10 + value % 10);
 		if (result)
 		{
 			for (int i = -1; i <= 1; i++)
@@ -318,7 +324,7 @@ public class MineMapModel : AMonoSingleton<MineMapModel>
 		{
 			for (int j = -1; j <= 1; j++)
 			{
-				if (IsOverMap(y + j, x + i))
+				if (IsOverMap(y + j, x + i) || (i == 0 && j == 0))
 					continue ;
 				if (IsCellState(GetCellState(y + j, x + i), ECellState.FlagRed) || IsCellState(GetCellState(y + j, x + i), ECellState.FlagBlue))
 					result += 1;
