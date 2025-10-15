@@ -183,6 +183,7 @@ public class GameManager : AMonoSingleton<GameManager>
 			{
 				SceneFader.Instance.SetColor(Color.white);
 				SceneFader.Instance.StartFade(0.2f);
+				counter.countFloorClear++;
 				Debug.Log("Clear Floor!");
 			}
 		}

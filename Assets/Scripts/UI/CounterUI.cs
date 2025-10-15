@@ -46,7 +46,7 @@ public class CounterUI : MonoBehaviour
 
 	public IEnumerator PopupUI()
 	{
-		WaitForSeconds wait = new WaitForSeconds(1f);
+		WaitForSeconds wait = new WaitForSeconds(0.5f);
 
 		for (int i = 0; i < UIs.Length; i++)
 		{
