@@ -25,6 +25,7 @@ public class ItemUI : MonoBehaviour
 	{
 		if (ItemManager.Instance.UseItem(index))
 		{
+			GameManager.Instance.counter.countUseItem++;
 			Debug.Log($"Use Item {index}");
 		}
 		return ;
