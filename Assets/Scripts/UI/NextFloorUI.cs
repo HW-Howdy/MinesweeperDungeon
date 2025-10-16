@@ -37,7 +37,7 @@ public class NextFloorUI : MonoBehaviour
 		nowTime += (-1 + 2 * Convert.ToInt32(isActive)) * Time.deltaTime;
 		nowTime = Mathf.Clamp(nowTime, 0f, showTime);
 
-		float easing = SCEasing.EasingByType(EEasingType.InOutQuad, nowTime / showTime);
+		float easing = SCEasing.EasingByType(EEasingType.InOutQuint, nowTime / showTime);
 		rectUI.localScale = easing * Vector2.one;
 		return;
 	}
