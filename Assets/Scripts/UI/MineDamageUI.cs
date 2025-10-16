@@ -12,6 +12,7 @@ public class MineDamageUI : MonoBehaviour
 	public void Awake()
 	{
 		GameManager.Instance.ActionOpenCellAfter += UpdateUI;
+		ItemManager.Instance.ActionItemValueChanged += UpdateUI;
 		return ;
 	}
 

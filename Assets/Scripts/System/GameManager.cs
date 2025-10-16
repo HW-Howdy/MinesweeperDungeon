@@ -169,8 +169,10 @@ public class GameManager : AMonoSingleton<GameManager>
 		}
 		else if (value / 100 == 2)
 		{
+			int item = UnityEngine.Random.Range(0, ItemManager.Instance.Items.Length);
+
 			counter.countCellItem++;
-			PlayerState.Instance.AddMana(1);
+			ItemManager.Instance.GetItem(item);
 		}
 		else if (value / 100 == 3)
 		{
