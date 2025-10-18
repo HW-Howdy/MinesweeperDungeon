@@ -35,6 +35,7 @@ public class MineMapViewer : MonoBehaviour
 		CellView.ActionAfterClick += UpdateCellView;
 		GameManager.Instance.ActionOpenCellAfter += UpdateCellView;
 		MineMapModel.Instance.ActionResizeMapAfter += Resize;
+		MineMapModel.Instance.ActionReloadMap += UpdateCellView;
 		return ;
 	}
 
@@ -117,7 +118,7 @@ public class MineMapViewer : MonoBehaviour
 			RectTransform rt = cell.GetComponent<RectTransform>();
 			rt.anchoredPosition = new Vector2(y * cellSize + cellSize / 2, - x * cellSize - cellSize / 2);
 			cell.GetComponent<CellView>().SetLocate(y, x);
-			cell.GetComponent<CellView>().SetAct(MineMapModel.Instance.canOpen);
+			cell.GetComponent<CellView>().SetAct(MineMapModel.Instance.CanOpen);
 		}
 		return ;
 	}
@@ -139,7 +140,7 @@ public class MineMapViewer : MonoBehaviour
 				continue ;
 			}
 			cellPool[i].GetComponent<CellView>().ReloadState(y, x);
-			cellPool[i].GetComponent<CellView>().SetAct(MineMapModel.Instance.canOpen);
+			cellPool[i].GetComponent<CellView>().SetAct(MineMapModel.Instance.CanOpen);
 		}
 		return ;
 	}

@@ -31,9 +31,20 @@ public class MineMapModel : AMonoSingleton<MineMapModel>
 {
 	private short[,] originMap;
 	private ECellState[,] stateMap;
-
-	public bool canOpen = true;
-
+	private bool canOpen = true;
+	
+	public bool CanOpen
+	{
+		get
+		{
+			return (canOpen);
+		}
+		set
+		{
+			canOpen = value;
+			ActionReloadMap?.Invoke();
+		}
+	}
 	public int Cols { get; private set; }
 	public int Rows { get; private set; }
 	public int RareCellCount { get; private set; }
@@ -41,6 +52,7 @@ public class MineMapModel : AMonoSingleton<MineMapModel>
 	public int Length { get => Rows * Cols; }
 
 	public Action ActionResizeMapAfter;
+	public Action ActionReloadMap;
 
 	protected override void Awake()
 	{
@@ -248,6 +260,12 @@ public class MineMapModel : AMonoSingleton<MineMapModel>
 		return ;
 	}
 
+	public void OpenCellForce(int y, int x)
+	{
+		SetCellState(y, x, ECellState.Open, out ECellState result);
+		return ;
+	}
+
 	public void FlagCell(int y, int x, out ECellState state)
 	{
 		ECellState target = GetCellState(y, x);
@@ -315,6 +333,30 @@ public class MineMapModel : AMonoSingleton<MineMapModel>
 
 		return (result);
 	}
+
+	public void CrossMineCheck(int y, int x)
+	{
+		for (int i = -1; i <= 1; i++)
+		{
+			if (IsOverMap(y + i, x))
+				continue ;
+			if (IsCellState(GetCellState(y + i, x), ECellState.Hidden) && GetCellValue(y + i, x) / 100 == 1) 
+			{
+				GameManager.Instance.OpenCellForce(y + i, x);
+			}
+		}
+		for (int i = -1; i <= 1; i++)
+		{
+			if (IsOverMap(y , x + i))
+				continue ;
+			if (IsCellState(GetCellState(y, x + i), ECellState.Hidden) && GetCellValue(y, x + i) / 100 == 1)
+			{
+				GameManager.Instance.OpenCellForce(y, x + i);
+			}
+		}
+		return ;
+	}
+
 
 	private byte CountAroundFlag(int y, int x)
 	{

@@ -40,7 +40,7 @@ public class CounterUI : MonoBehaviour
 		tmps[3].text = $"Clear Floor :\n{counter.countFloorClear}";
 		tmps[4].text = $"Reach Floor :\nB{counter.countFloorDeep}F";
 		tmps[5].text = $"Use Item :\n{counter.countUseItem}";
-		tmps[6].text = $"Use Magic :\n{counter.countUseMagic}";
+		tmps[6].text = $"Use Magic :\n{counter.countUseSkill}";
 		return ;
 	}
 

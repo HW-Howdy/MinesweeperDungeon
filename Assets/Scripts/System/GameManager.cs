@@ -163,7 +163,7 @@ public class GameManager : AMonoSingleton<GameManager>
 			int mine = UnityEngine.Random.Range(0, mineState.Length);
 
 			counter.countCellMine++;
-			MineMapModel.Instance.canOpen = false;
+			MineMapModel.Instance.CanOpen = false;
 			SceneFader.Instance.SetColor(mineState[mine].color);
 			SceneFader.Instance.StartFade(0.15f, null, () => Damage(mine));
 		}
@@ -180,18 +180,37 @@ public class GameManager : AMonoSingleton<GameManager>
 		}
 		else
 		{
-			foundCellCommon++;
-			if (foundCellCommon == MineMapModel.Instance.CommonCellCount)
-			{
-				SceneFader.Instance.SetColor(Color.white);
-				SceneFader.Instance.StartFade(0.2f);
-				counter.countFloorClear++;
-				Debug.Log("Clear Floor!");
-			}
+			FoundCellCommon();
 		}
 		counter.countCellFound++;
 		ActionOpenCellAfter?.Invoke();
 		return;
+	}
+
+	public void FoundCellCommon()
+	{
+		foundCellCommon++;
+		if (foundCellCommon == MineMapModel.Instance.CommonCellCount)
+		{
+			SceneFader.Instance.SetColor(Color.white);
+			SceneFader.Instance.StartFade(0.2f);
+			counter.countFloorClear++;
+			Debug.Log("Clear Floor!");
+		}
+		return ;
+	}
+
+	public void OpenCellForce(int y, int x)
+	{
+		short value = MineMapModel.Instance.GetCellValue(y, x);
+
+		MineMapModel.Instance.OpenCellForce(y, x);
+		if (value / 100 == 0)
+			OpenCellEvent(value);
+		else if (value / 100 == 1)
+			counter.countCellMine++;
+		ActionOpenCellAfter?.Invoke();
+		return ;
 	}
 
 	public void Damage(int mine)
@@ -201,14 +220,14 @@ public class GameManager : AMonoSingleton<GameManager>
 			EndGame();
 			return ;
 		}
-		MineMapModel.Instance.canOpen = true;
+		MineMapModel.Instance.CanOpen = true;
 		ActionOpenCellAfter?.Invoke();
 		return ;
 	}
 
 	public void NextFloor()
 	{
-		if (!MineMapModel.Instance.canOpen)
+		if (!MineMapModel.Instance.CanOpen)
 			return ;
 		counter.countFloorDeep = ++gameState.floorNow;
 		if (gameState.floorNow == 1)
@@ -232,7 +251,7 @@ public class GameManager : AMonoSingleton<GameManager>
 
 	public void EndGame()
 	{
-		MineMapModel.Instance.canOpen = false;
+		MineMapModel.Instance.CanOpen = false;
 		counter.SaveCount();
 		SceneFader.Instance.SetColor(Color.black);
 		SceneFader.Instance.LoadSceneWithFade(2);

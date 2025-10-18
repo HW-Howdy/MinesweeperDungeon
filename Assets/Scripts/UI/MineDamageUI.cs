@@ -5,9 +5,7 @@ using UnityEngine.UI;
 public class MineDamageUI : MonoBehaviour
 {
 	[SerializeField]
-	private Image[] _image;
-	[SerializeField]
-	private TMP_Text[] _text;
+	private MineDamageUICell[] _mineDamageUICells;
 
 	public void Awake()
 	{
@@ -18,18 +16,19 @@ public class MineDamageUI : MonoBehaviour
 
 	public void Start()
 	{
+		for (int i = 0; i < _mineDamageUICells.Length; i++)
+		{
+			_mineDamageUICells[i].index = i;
+		}
 		UpdateUI();
 		return ;
 	}
 
 	public void UpdateUI()
 	{
-		SMineState[] state = GameManager.Instance.MineState;
-
-		for (int i = 0; i < state.Length; i++)
+		for (int i = 0; i < _mineDamageUICells.Length; i++)
 		{
-			_image[i].color = state[i].color;
-			_text[i].text = $"{state[i].damage:D2}";
+			_mineDamageUICells[i].UpdateUI();
 		}
 		return ;
 	}

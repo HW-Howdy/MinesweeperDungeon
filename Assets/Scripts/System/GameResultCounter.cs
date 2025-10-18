@@ -9,7 +9,7 @@ public class GameResultCounter
 	public int countFloorClear;
 	public int countFloorDeep;
 
-	public int countUseMagic;
+	public int countUseSkill;
 	public int countUseItem;
 
 	public GameResultCounter()
@@ -25,7 +25,7 @@ public class GameResultCounter
 		countCellItem = 0;
 		countFloorClear = 0;
 		countFloorDeep = 0;
-		countUseMagic = 0;
+		countUseSkill = 0;
 		countUseItem = 0;
 		return ;
 	}
@@ -37,7 +37,7 @@ public class GameResultCounter
 		PlayerPrefs.SetInt("countCellItem", countCellItem);
 		PlayerPrefs.SetInt("countFloorClear", countFloorClear);
 		PlayerPrefs.SetInt("countFloorDeep", countFloorDeep);
-		PlayerPrefs.SetInt("countUseMagic", countUseMagic);
+		PlayerPrefs.SetInt("countUseMagic", countUseSkill);
 		PlayerPrefs.SetInt("countUseItem", countUseItem);
 		return ;
 	}
@@ -51,7 +51,7 @@ public class GameResultCounter
 		countCellItem = PlayerPrefs.GetInt("countCellItem", countCellItem);
 		countFloorClear =PlayerPrefs.GetInt("countFloorClear", countFloorClear);
 		countFloorDeep=PlayerPrefs.GetInt("countFloorDeep", countFloorDeep);
-		countUseMagic = PlayerPrefs.GetInt("countUseMagic", countUseMagic);
+		countUseSkill = PlayerPrefs.GetInt("countUseMagic", countUseSkill);
 		countUseItem = PlayerPrefs.GetInt("countUseItem", countUseItem);
 		return ;
 	}

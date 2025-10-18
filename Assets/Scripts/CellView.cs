@@ -41,11 +41,21 @@ public class CellView : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 		return ;
 	}
 
+	public ECellState GetState()
+	{
+		return (state);
+	}
+
 	public void ReloadState(int y, int x)
 	{
 		state = MineMapModel.Instance.GetCellState(y, x);
 		UpdateUI();
 		return;
+	}
+
+	public int[] GetLocate()
+	{
+		return (new int[] { x, y });
 	}
 
 	public void UpdateUI()
