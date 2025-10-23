@@ -29,6 +29,7 @@ public class CellView : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 	public void SetAct(bool act)
 	{
 		canActClickEvent = act;
+
 		return ;
 	}
 

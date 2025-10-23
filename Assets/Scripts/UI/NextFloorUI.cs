@@ -42,6 +42,7 @@ public class NextFloorUI : MonoBehaviour
 	public void SetActiveTrue()
 	{
 		isActive = true;
+		gameObject.SetActive(true);
 		return ;
 	}
 

@@ -44,6 +44,7 @@ public class GameModeSelecterUI : MonoBehaviour
 	public void Active(bool isActive)
 	{
 		this.isActive = isActive;
+		gameObject.SetActive(true);
 		return ;
 	}
 
