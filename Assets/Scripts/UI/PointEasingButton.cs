@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnitySubCore.Easing;
 
 public class PointEasingButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -12,8 +13,15 @@ public class PointEasingButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 	[SerializeField]
 	private float scaleTime = 0.25f;
 	private float nowTime = 0f;
+	private Button self;
 
 	private bool isPointerOnButton = false;
+
+	public void Awake()
+	{
+		self = GetComponent<Button>();
+		return ;
+	}
 
 	public void Update()
 	{
@@ -58,8 +66,11 @@ public class PointEasingButton : MonoBehaviour, IPointerEnterHandler, IPointerEx
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		isPointerOnButton = true;
-		return ;
+		if (self.interactable)
+			isPointerOnButton = true;
+		else
+			isPointerOnButton = false;
+		return;
 	}
 
 	public void OnPointerExit(PointerEventData eventData)

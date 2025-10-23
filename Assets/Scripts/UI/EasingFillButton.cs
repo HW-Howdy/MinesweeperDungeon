@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using UnitySubCore.Easing;
 
 public class EasingFillButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
@@ -14,6 +15,7 @@ public class EasingFillButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
 	[SerializeField]
 	private float _fillTime = 0.25f;
 	private float nowTime = 0f;
+	private Button self;
 
 	private bool isPointerOnButton = false;
 	private RectTransform originTransform;
@@ -21,7 +23,7 @@ public class EasingFillButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
 	public void Awake()
 	{
 		originTransform = (RectTransform)transform;
-
+		self = GetComponent<Button>();
 		return ;
 	}
 
@@ -72,8 +74,11 @@ public class EasingFillButton : MonoBehaviour, IPointerEnterHandler, IPointerExi
 
 	public void OnPointerEnter(PointerEventData eventData)
 	{
-		isPointerOnButton = true;
-		return ;
+		if (self.interactable)
+			isPointerOnButton = true;
+		else
+			isPointerOnButton = false;
+		return;
 	}
 
 	public void OnPointerExit(PointerEventData eventData)

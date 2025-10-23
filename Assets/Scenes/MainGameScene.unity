@@ -952,8 +952,12 @@ PrefabInstance:
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6873378899685373603, guid: a8d7124644700934fa3777f5246e1271, type: 3}
+      propertyPath: _fillTime
+      value: 0.0625
+      objectReference: {fileID: 0}
+    - target: {fileID: 6873378899685373603, guid: a8d7124644700934fa3777f5246e1271, type: 3}
       propertyPath: _targetScale
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7894607834146569480, guid: a8d7124644700934fa3777f5246e1271, type: 3}
       propertyPath: m_text
@@ -3544,8 +3548,12 @@ PrefabInstance:
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6873378899685373603, guid: a8d7124644700934fa3777f5246e1271, type: 3}
+      propertyPath: _fillTime
+      value: 0.0625
+      objectReference: {fileID: 0}
+    - target: {fileID: 6873378899685373603, guid: a8d7124644700934fa3777f5246e1271, type: 3}
       propertyPath: _targetScale
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7894607834146569480, guid: a8d7124644700934fa3777f5246e1271, type: 3}
       propertyPath: m_text
@@ -5833,8 +5841,12 @@ PrefabInstance:
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6873378899685373603, guid: a8d7124644700934fa3777f5246e1271, type: 3}
+      propertyPath: _fillTime
+      value: 0.0625
+      objectReference: {fileID: 0}
+    - target: {fileID: 6873378899685373603, guid: a8d7124644700934fa3777f5246e1271, type: 3}
       propertyPath: _targetScale
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7894607834146569480, guid: a8d7124644700934fa3777f5246e1271, type: 3}
       propertyPath: m_text
@@ -8521,8 +8533,12 @@ PrefabInstance:
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 6873378899685373603, guid: a8d7124644700934fa3777f5246e1271, type: 3}
+      propertyPath: _fillTime
+      value: 0.0625
+      objectReference: {fileID: 0}
+    - target: {fileID: 6873378899685373603, guid: a8d7124644700934fa3777f5246e1271, type: 3}
       propertyPath: _targetScale
-      value: 0.8
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7894607834146569480, guid: a8d7124644700934fa3777f5246e1271, type: 3}
       propertyPath: m_text
