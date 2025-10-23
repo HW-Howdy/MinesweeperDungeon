@@ -60,7 +60,7 @@ public class SkillManager : AMonoSingleton<SkillManager>
 					}
 				}
 			}
-			FlagUseSkill(false);
+			StartCoroutine(FlagSkillEnd());
 			Debug.Log("Click After Skill");
 		}
 		return ;
@@ -125,6 +125,14 @@ public class SkillManager : AMonoSingleton<SkillManager>
 			return (false);
 		StartCoroutine(SkillEffect(index));
 		return (true);
+	}
+
+	public IEnumerator FlagSkillEnd()
+	{
+		while (Input.GetMouseButton(0))
+			yield return (null);
+		FlagUseSkill(false);
+		yield break ;
 	}
 
 	public void FlagUseSkill(bool flag, int index = 0)

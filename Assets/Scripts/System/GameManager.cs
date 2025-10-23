@@ -48,6 +48,7 @@ public class GameManager : AMonoSingleton<GameManager>
 	public Action<int, int> ActionAfterUpdateFloor;
 	public Action ActionQuestNextFloor;
 	public Action ActionOpenCellAfter;
+	public Action ActionClearFloorAfter;
 
 	protected override void Awake()
 	{
@@ -195,6 +196,7 @@ public class GameManager : AMonoSingleton<GameManager>
 			SceneFader.Instance.SetColor(Color.white);
 			SceneFader.Instance.StartFade(0.2f);
 			counter.countFloorClear++;
+			ActionClearFloorAfter?.Invoke();
 			Debug.Log("Clear Floor!");
 		}
 		return ;

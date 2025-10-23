@@ -10,23 +10,51 @@ public class PlayerState : ASingleton<PlayerState>
 	private int manaCurrent;
 	private int manaMax;
 
+
 	public Action<int, int> ActionAfterEditHealth;
 	public Action<int, int> ActionAfterEditMana;
 
+	public int MaxHP { get => (healthMax); }
+	public int MaxMP { get => (manaMax); }
+
 	public void SetHealth(int health)
 	{
+		if (health <= 0)
+			return ;
 		healthCurrent = health;
 		healthMax = health;
 		ActionAfterEditHealth?.Invoke(healthCurrent, healthMax);
-		return ;
+		return;
 	}
 
 	public void SetMana(int mana)
 	{
+		if (mana <= 0)
+			return;
 		manaCurrent = mana;
 		manaMax = mana;
 		ActionAfterEditMana?.Invoke(manaCurrent, manaMax);
-		return ;
+		return;
+	}
+
+	public void SetMaxHealth(int health)
+	{
+		if (health <= 0)
+			return;
+		healthMax = health;
+		healthCurrent = Math.Min(healthCurrent, healthMax);
+		ActionAfterEditHealth?.Invoke(healthCurrent, healthMax);
+		return;
+	}
+
+	public void SetMaxMana(int mana)
+	{
+		if (mana <= 0)
+			return;
+		manaMax = mana;
+		manaCurrent = Math.Min(manaCurrent, manaMax);
+		ActionAfterEditMana?.Invoke(manaCurrent, manaMax);
+		return;
 	}
 
 	public int AddHealth(int add)
