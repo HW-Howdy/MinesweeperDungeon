@@ -26,13 +26,15 @@ public class MineMapViewer : MonoBehaviour
 	private int visibleRows;
 	private int visibleCols;
 
-	private List<GameObject> cellPool = new List<GameObject>();
+	private List<GameObject>	cellObjs = new List<GameObject>();
+	private List<CellView>		cellViews = new List<CellView>();
+	private List<RectTransform>	cellRects = new List<RectTransform>();
 
 	public void Start()
 	{
 		Resize(cellSize);
 		_scrollRect.onValueChanged.AddListener((_) => UpdateCells());
-		CellView.ActionAfterClick += UpdateCellView;
+		CellView.StaticActionAfterClick += UpdateCellView;
 		GameManager.Instance.ActionOpenCellAfter += UpdateCellView;
 		MineMapModel.Instance.ActionResizeMapAfter += Resize;
 		MineMapModel.Instance.ActionReloadMap += UpdateCellView;
@@ -41,7 +43,7 @@ public class MineMapViewer : MonoBehaviour
 
 	public void OnDestroy()
 	{
-		CellView.ActionAfterClick -= UpdateCellView;
+		CellView.StaticActionAfterClick -= UpdateCellView;
 		return ;
 	}
 
@@ -74,21 +76,26 @@ public class MineMapViewer : MonoBehaviour
 
 		// 풀링할 셀 생성
 		int poolSize = visibleCols * visibleRows;
-		int i = cellPool.Count;
+		int i = cellObjs.Count;
 		while (i < poolSize)
 		{
 			GameObject cell = Instantiate(_cellPrefab, _content);
-			cellPool.Add(cell);
+
+			cellObjs.Add(cell);
+			cellViews.Add(cell.GetComponent<CellView>());
+			cellRects.Add(cell.GetComponent<RectTransform>());
 			i++;
 		}
 		while (--i > poolSize)
 		{
-			Destroy(cellPool[i]);
-			cellPool.RemoveAt(i);
+			Destroy(cellObjs[i]);
+			cellObjs.RemoveAt(i);
+			cellViews.RemoveAt(i);
+			cellRects.RemoveAt(i);
 		}
 		while (i >= 0)
 		{
-			cellPool[i--].GetComponent<RectTransform>().sizeDelta = Vector2.one * cellSize;
+			cellRects[i--].sizeDelta = Vector2.one * cellSize;
 		}
 		UpdateCells();
 		return ;
@@ -103,22 +110,20 @@ public class MineMapViewer : MonoBehaviour
 		int firstRow = Mathf.FloorToInt(scrollY / cellSize);
 		int firstCol = Mathf.FloorToInt(scrollX / cellSize);
 
-		for (int i = 0; i < cellPool.Count; i++)
+		for (int i = 0; i < cellObjs.Count; i++)
 		{
 			int x = i / visibleCols + firstRow;
 			int y = i % visibleCols + firstCol;
-			GameObject cell = cellPool[i];
 
 			if (x < 0 || x >= MineMapModel.Instance.Rows || y < 0 || y >= MineMapModel.Instance.Cols)
 			{
-				cell.SetActive(false);
+				cellObjs[i].SetActive(false);
 				continue ;
 			}
-			cell.SetActive(true);
-			RectTransform rt = cell.GetComponent<RectTransform>();
-			rt.anchoredPosition = new Vector2(y * cellSize + cellSize / 2, - x * cellSize - cellSize / 2);
-			cell.GetComponent<CellView>().SetLocate(y, x);
-			cell.GetComponent<CellView>().SetAct(MineMapModel.Instance.CanOpen);
+			cellObjs[i].SetActive(true);
+			cellRects[i].anchoredPosition = new Vector2(y * cellSize + cellSize / 2, - x * cellSize - cellSize / 2);
+			cellViews[i].SetLocate(y, x);
+			cellViews[i].SetAct(MineMapModel.Instance.CanOpen);
 		}
 		return ;
 	}
@@ -131,7 +136,7 @@ public class MineMapViewer : MonoBehaviour
 		int firstRow = Mathf.FloorToInt(scrollY / cellSize);
 		int firstCol = Mathf.FloorToInt(scrollX / cellSize);
 
-		for (int i = 0; i < cellPool.Count; i++)
+		for (int i = 0; i < cellObjs.Count; i++)
 		{
 			int x = i / visibleCols + firstRow;
 			int y = i % visibleCols + firstCol;
@@ -139,8 +144,8 @@ public class MineMapViewer : MonoBehaviour
 			{
 				continue ;
 			}
-			cellPool[i].GetComponent<CellView>().ReloadState(y, x);
-			cellPool[i].GetComponent<CellView>().SetAct(MineMapModel.Instance.CanOpen);
+			cellViews[i].ReloadState(y, x);
+			cellViews[i].GetComponent<CellView>().SetAct(MineMapModel.Instance.CanOpen);
 		}
 		return ;
 	}

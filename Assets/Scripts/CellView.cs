@@ -22,9 +22,9 @@ public class CellView : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 
 	public Vector2Int Location { get => new Vector2Int(x, y); }
 
-	public static Action ActionAfterClick;
-	public static Action<short> ActionPointerEnter;
-	public static Action ActionPointerExit;
+	public static Action StaticActionAfterClick;
+	public static Action<short> StaticActionPointerEnter;
+	public static Action StaticActionPointerExit;
 
 	public void SetAct(bool act)
 	{
@@ -94,13 +94,13 @@ public class CellView : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 	public void OnPointerEnter(PointerEventData eventData)
 	{
 		if (IsCellState(state, ECellState.Open))
-			ActionPointerEnter?.Invoke(MineMapModel.Instance.GetCellValue(y, x));
+			StaticActionPointerEnter?.Invoke(MineMapModel.Instance.GetCellValue(y, x));
 		return ;
 	}
 
 	public void OnPointerExit(PointerEventData eventData)
 	{
-		ActionPointerExit?.Invoke();
+		StaticActionPointerExit?.Invoke();
 		return;
 	}
 
@@ -117,14 +117,14 @@ public class CellView : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 			if (eventData.button == PointerEventData.InputButton.Left && eventData.clickCount == 2)
 			{
 				if (MineMapModel.Instance.CheckAround(y, x))
-					ActionAfterClick?.Invoke();
+					StaticActionAfterClick?.Invoke();
 			}
 		}
 		else if (eventData.button == PointerEventData.InputButton.Left)
 		{
 			MineMapModel.Instance.OpenCell(y, x);
-			ActionAfterClick?.Invoke();
-			ActionPointerEnter?.Invoke(MineMapModel.Instance.GetCellValue(y, x));
+			StaticActionAfterClick?.Invoke();
+			StaticActionPointerEnter?.Invoke(MineMapModel.Instance.GetCellValue(y, x));
 		}
 		else if (eventData.button == PointerEventData.InputButton.Right)
 		{

@@ -7,15 +7,15 @@ public class SweeperUI : MonoBehaviour
 
 	public void Awake()
 	{
-		CellView.ActionPointerEnter += UpdateUI;
-		CellView.ActionPointerExit += RemoveUI;
+		CellView.StaticActionPointerEnter += UpdateUI;
+		CellView.StaticActionPointerExit += RemoveUI;
 		return ;
 	}
 
 	public void OnDestroy()
 	{
-		CellView.ActionPointerEnter -= UpdateUI;
-		CellView.ActionPointerExit -= RemoveUI;
+		CellView.StaticActionPointerEnter -= UpdateUI;
+		CellView.StaticActionPointerExit -= RemoveUI;
 		return ;
 	}
 
