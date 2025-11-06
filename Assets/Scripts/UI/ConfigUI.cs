@@ -1,8 +1,9 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using UnitySubCore.Easing;
 
-public class NextFloorUI : MonoBehaviour
+public class ConfigUI : MonoBehaviour
 {
 	[SerializeField]
 	private GameObject UI;
@@ -19,7 +20,6 @@ public class NextFloorUI : MonoBehaviour
 	{
 		rectUI = UI.GetComponent<RectTransform>();
 		originSize = rectUI.sizeDelta;
-		GameManager.Instance.ActionQuestNextFloor += SetActiveTrue;
 		return ;
 	}
 
@@ -31,7 +31,7 @@ public class NextFloorUI : MonoBehaviour
 
 	public void Resize()
 	{
-		nowTime += (-1 + 2 * Convert.ToInt32(isActive)) * Time.deltaTime;
+		nowTime += (- 1 + 2 * Convert.ToInt32(isActive)) * Time.deltaTime;
 		nowTime = Mathf.Clamp(nowTime, 0f, showTime);
 
 		float easing = SCEasing.EasingByType(EEasingType.InOutQuint, nowTime / showTime);
@@ -39,22 +39,10 @@ public class NextFloorUI : MonoBehaviour
 		return ;
 	}
 
-	public void SetActiveTrue()
-	{
-		isActive = true;
-		gameObject.SetActive(true);
-		return ;
-	}
-
-	public void NextFloor()
-	{
-		GameManager.Instance.NextFloor();
-		return ;
-	}
-
 	public void Active(bool isActive)
 	{
 		this.isActive = isActive;
+		gameObject.SetActive(true);
 		return ;
 	}
 }

@@ -7,6 +7,7 @@ using UnitySubCore.Singleton;
 public struct SGameState
 {
 	public string modeName;
+	public string modeDecs;
 	public int cols;
 	public int rows;
 	public float mineRatio;
@@ -36,7 +37,7 @@ public class GameManager : AMonoSingleton<GameManager>
 	public GameResultCounter counter;
 
 	[SerializeField]
-	private SGameState[] _gameStates;
+	private GameStateSO[] _gameStateSOs;
 	private SGameState gameState;
 
 	private SMineState[]	mineState = new SMineState[3];
@@ -72,7 +73,7 @@ public class GameManager : AMonoSingleton<GameManager>
 	public void StartNewGame(short gameMode)
 	{
 		counter.Clear();
-		gameState = _gameStates[gameMode];
+		gameState = _gameStateSOs[gameMode].GetGameState();
 		ActionNextFloor = null;
 		PlayerState.Instance.SetHealth(6);
 		PlayerState.Instance.SetMana(4);

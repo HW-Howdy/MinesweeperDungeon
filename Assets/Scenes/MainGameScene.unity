@@ -3709,43 +3709,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7ffe64935a2ad9479a222d2ec4aa6e6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gameStates:
-  - modeName: Challenge
-    cols: 5
-    rows: 5
-    mineRatio: 0.15
-    mineHigh: 0.6
-    itemRatio: 0.2
-    itemLow: 0.02
-    floorNow: 0
-    floorMax: 500
-  - modeName: Easy
-    cols: 5
-    rows: 5
-    mineRatio: 0.1
-    mineHigh: 0.2
-    itemRatio: 0.1
-    itemLow: 0.1
-    floorNow: 0
-    floorMax: 10
-  - modeName: Normal
-    cols: 5
-    rows: 5
-    mineRatio: 0.15
-    mineHigh: 0.3
-    itemRatio: 0.15
-    itemLow: 0.05
-    floorNow: 0
-    floorMax: 20
-  - modeName: Hard
-    cols: 5
-    rows: 5
-    mineRatio: 0.2
-    mineHigh: 0.45
-    itemRatio: 0.1
-    itemLow: 0.02
-    floorNow: 0
-    floorMax: 30
+  _gameStateSOs:
+  - {fileID: 11400000, guid: 3b94dac4bbb933447bd7cb842da75126, type: 2}
+  - {fileID: 11400000, guid: 5c04d0d4bf200a84fbcd0a8e02ae4a5a, type: 2}
+  - {fileID: 11400000, guid: cf2b7b303817d234084042b405629c2e, type: 2}
+  - {fileID: 11400000, guid: 221ae8d7739996c4993254f85d03a750, type: 2}
 --- !u!1 &683747981
 GameObject:
   m_ObjectHideFlags: 0
