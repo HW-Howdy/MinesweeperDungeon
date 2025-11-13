@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnitySubCore.Singleton;
 
-public class ItemManager : AMonoSingleton<ItemManager>
+public class ItemManager : ASingleton<ItemManager>
 {
 	private int[] itemList = new int[9];
 
@@ -36,13 +36,16 @@ public class ItemManager : AMonoSingleton<ItemManager>
 		switch (index)
 		{
 			case 0:
-				GameManager.Instance.MineState[0].damage -= 1;
+				if (GameManager.Instance.MineState[0].damage > 0)
+					GameManager.Instance.MineState[0].damage -= 1;
 				break ;
 			case 1:
-				GameManager.Instance.MineState[1].damage -= 1;
+				if (GameManager.Instance.MineState[1].damage > 0)
+					GameManager.Instance.MineState[1].damage -= 1;
 				break ;
 			case 2:
-				GameManager.Instance.MineState[2].damage -= 1;
+				if (GameManager.Instance.MineState[2].damage > 0)
+					GameManager.Instance.MineState[2].damage -= 1;
 				break ;
 			case 3:
 				PlayerState.Instance.AddHealth(1);
