@@ -1,8 +1,9 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class MineDamageUICell : MonoBehaviour
+public class MineDamageUICell : MonoBehaviour, ITooltipTargetUI
 {
 	[SerializeField]
 	private Image _image;
@@ -10,14 +11,37 @@ public class MineDamageUICell : MonoBehaviour
 	private TMP_Text _text;
 	public int index;
 
+	[SerializeField]
+	private GameObject _tooltipUI;
+	private ITooltipUI tooltip;
+
 	public void Awake()
 	{
+		tooltip = _tooltipUI.GetComponent<ITooltipUI>();
 		return ;
 	}
 
 	public void Start()
 	{
 		return ;
+	}
+
+	public void OnPointerEnter(PointerEventData eventData)
+	{
+		tooltip?.Enter(eventData, index);
+		return;
+	}
+
+	public void OnPointerMove(PointerEventData eventData)
+	{
+		tooltip?.UpdateUI(eventData, index);
+		return;
+	}
+
+	public void OnPointerExit(PointerEventData eventData)
+	{
+		tooltip?.Exit(eventData, index);
+		return;
 	}
 
 	public void UpdateUI()
