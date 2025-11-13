@@ -55,7 +55,8 @@ public class MineDamageUICell : MonoBehaviour, ITooltipTargetUI
 
 	public void ReduceDamage()
 	{
-		GameManager.Instance.MineState[index].damage -= 1;
+		if (GameManager.Instance.MineState[index].damage > 1)
+			GameManager.Instance.MineState[index].damage -= 1;
 		UpdateUI();
 		return ;
 	}

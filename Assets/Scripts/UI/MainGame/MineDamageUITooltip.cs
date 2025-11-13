@@ -21,8 +21,9 @@ public class MineDamageUITooltip : MonoBehaviour, ITooltipUI
 	private void SetUI(int idx)
 	{
 		SMineState state = GameManager.Instance.MineState[idx];
+		Color tempColor = state.color * 0.78f;
 
-		image.color = state.color * 0.78f;
+		image.color = new Color(tempColor.r, tempColor.g, tempColor.b, 1f);
 		_texts[0].text = $"이 유형의 지뢰칸을 밝히면 {GameManager.Instance.MineState[idx].damage}의 피해를 입습니다.";
 		return ;
 	}

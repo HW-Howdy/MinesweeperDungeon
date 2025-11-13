@@ -18,6 +18,13 @@ public class SkillManager : AMonoSingleton<SkillManager>
 	public bool nowUseSkill = false;
 	private int skillID = 0;
 
+	public string[] skillDesc = {
+		"Cost : 1\n선택한 칸을 강제로 개방한다. (이벤트 무시)", //0 - 강제개방
+		"Cost : 3\n선택한 칸을 기준으로, 십자 모양의 5칸에 지뢰가 있다면 강제로 개방한다. (이벤트 무시)", //1 - 십자 열기
+		"Cost : 4\n선택한 지뢰 유형의 받는 데미지를 1 감소시킨다.", //2 - 데미지 감소
+		"Cost : 6\n체력을 3 회복한다."  //3 - 체력 회복
+	};
+
 	public void Start()
 	{
 		if (_raycaster == null)
