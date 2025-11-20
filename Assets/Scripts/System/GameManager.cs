@@ -239,6 +239,7 @@ public class GameManager : AMonoSingleton<GameManager>
 		}
 		else if (gameState.floorNow > gameState.floorMax)
 		{
+			counter.countFloorDeep--;
 			EndGame();
 		}
 		else

@@ -13,6 +13,9 @@ public class SkillManager : AMonoSingleton<SkillManager>
 	[SerializeField]
 	private EventSystem _eventSystem;
 
+	[SerializeField]
+	private GameObject _skillPointerGo;
+
 	private int[] skillCost = { 1, 3, 4, 6 };
 
 	public bool nowUseSkill = false;
@@ -42,11 +45,14 @@ public class SkillManager : AMonoSingleton<SkillManager>
 	{
 		if (nowUseSkill)
 			GetSkillPosition(skillID);
+		if (_skillPointerGo.activeSelf != nowUseSkill)
+			_skillPointerGo.SetActive(nowUseSkill);
 		return ;
 	}
 
 	public void GetSkillPosition(int index)
 	{
+		_skillPointerGo.transform.position = Input.mousePosition;
 		if (Input.GetMouseButtonDown(0))
 		{
 			RaycastResult[] result = Raycast(Input.mousePosition);

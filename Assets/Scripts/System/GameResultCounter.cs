@@ -49,8 +49,8 @@ public class GameResultCounter
 		countCellFound = PlayerPrefs.GetInt("countCellFound", countCellFound);
 		countCellMine = PlayerPrefs.GetInt("countCellMine", countCellMine);
 		countCellItem = PlayerPrefs.GetInt("countCellItem", countCellItem);
-		countFloorClear =PlayerPrefs.GetInt("countFloorClear", countFloorClear);
-		countFloorDeep=PlayerPrefs.GetInt("countFloorDeep", countFloorDeep);
+		countFloorClear = PlayerPrefs.GetInt("countFloorClear", countFloorClear);
+		countFloorDeep = PlayerPrefs.GetInt("countFloorDeep", countFloorDeep);
 		countUseSkill = PlayerPrefs.GetInt("countUseMagic", countUseSkill);
 		countUseItem = PlayerPrefs.GetInt("countUseItem", countUseItem);
 		return ;
