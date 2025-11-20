@@ -66,7 +66,7 @@ public class CounterUI : MonoBehaviour
 			grade = 'B';
 		else if (score < 4500)
 			grade = 'A';
-		else
+		else // (score >= 4500)
 			grade = 'S';
 		return ;
 	}

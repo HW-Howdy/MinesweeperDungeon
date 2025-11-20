@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 //배경 음악 출력을 담당하는 클래스
 public class AudioManager : MonoBehaviour
 {
+	public static float volume = 1.0f;
+
 	//배경음악
 	[SerializeField]
 	private AudioClip[]	_audioClips;
@@ -16,12 +19,19 @@ public class AudioManager : MonoBehaviour
 	private List<int>	audioList = new List<int>();
 	private int			now;
 	
+	public static void SetWorldVolume(float vol)
+	{
+		volume = vol;
+		return ;
+	}
+
 	// Start is called before the first frame update
 	void Awake()
 	{
 		audioSource = GetComponent<AudioSource>();
 		for (int i = 0; i < _audioClips.Length; i++)
 			audioList.Add(i);
+		SetVolume(volume);
 		now = Random.Range(0, audioList.Count);
 		audioList.Remove(now);
 		return ;
@@ -42,6 +52,12 @@ public class AudioManager : MonoBehaviour
 		audioList.Add(now);
 		audioList.Remove(idx);
 		audioSource.Play();
+		return ;
+	}
+
+	public void SetVolume(float volume)
+	{
+		audioSource.volume = volume;
 		return ;
 	}
 }
