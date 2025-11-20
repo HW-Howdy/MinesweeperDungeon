@@ -17,7 +17,7 @@ public class ResolutionUI : MonoBehaviour
 		int currentIndex = 0;
 
 		resolutions = Screen.resolutions;
-		_resolutionDropdown.ClearOptions();1
+		_resolutionDropdown.ClearOptions();
 		for (int i = 0; i < resolutions.Length; i++)
 		{
 			string option = $"{resolutions[i].width} X {resolutions[i].height}";
