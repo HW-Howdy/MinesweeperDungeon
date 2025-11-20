@@ -1,18 +1,21 @@
 using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnitySubCore.Easing;
 
 public class VolumeUI : MonoBehaviour
 {
 	[SerializeField]
 	private Slider _sliderVolume;
+	[SerializeField]
+	private TMP_Text _tmpVolume;
 
 	private AudioSource[] audioSources;
 
 	private void Start()
 	{
-		audioSources = GameObject.FindObjectsOfType<AudioSource>();
+		audioSources = FindObjectsOfType<AudioSource>();
+		return ;
 	}
 
 	public void ChangeVolume(float volume)
@@ -21,6 +24,7 @@ public class VolumeUI : MonoBehaviour
 		{
 			source.volume = volume;
 		}
+		_tmpVolume.text = $"{volume:F2}";
 		AudioManager.SetWorldVolume(volume);
 		return ;
 	}
