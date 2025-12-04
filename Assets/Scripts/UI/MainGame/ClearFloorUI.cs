@@ -67,6 +67,8 @@ public class ClearFloorUI : MonoBehaviour
 
 	public void AcceptBonus(int index)
 	{
+		if (!isActive)
+			return ;
 		if (index == 0)
 		{
 			PlayerState.Instance.SetMaxHealth(PlayerState.Instance.MaxHP + 1);

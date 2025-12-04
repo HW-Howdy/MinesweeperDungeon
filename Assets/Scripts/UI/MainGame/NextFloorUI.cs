@@ -48,6 +48,8 @@ public class NextFloorUI : MonoBehaviour
 
 	public void NextFloor()
 	{
+		if (!isActive)
+			return ;
 		GameManager.Instance.NextFloor();
 		return ;
 	}
