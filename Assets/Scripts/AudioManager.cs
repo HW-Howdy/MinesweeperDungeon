@@ -6,7 +6,7 @@ using UnityEngine;
 //배경 음악 출력을 담당하는 클래스
 public class AudioManager : MonoBehaviour
 {
-	public static float volume = 1.0f;
+	public static float volume = 0.5f;
 
 	//배경음악
 	[SerializeField]
@@ -41,7 +41,12 @@ public class AudioManager : MonoBehaviour
 	void Update()
 	{
 		if (!audioSource.isPlaying)
-			PlayNextClip(audioList[Random.Range(0, audioList.Count)]);
+		{
+			if (audioList.Count >= 1)
+				PlayNextClip(audioList[Random.Range(0, audioList.Count)]);
+			else
+				PlayNextClip(0);
+		}
 		return ;
 	}
 
@@ -52,6 +57,7 @@ public class AudioManager : MonoBehaviour
 		audioList.Add(now);
 		audioList.Remove(idx);
 		audioSource.Play();
+		now = idx;
 		return ;
 	}
 

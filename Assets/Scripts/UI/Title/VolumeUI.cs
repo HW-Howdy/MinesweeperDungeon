@@ -15,6 +15,7 @@ public class VolumeUI : MonoBehaviour
 	private void Start()
 	{
 		audioSources = FindObjectsOfType<AudioSource>();
+		_sliderVolume.value = AudioManager.volume;
 		return ;
 	}
 
