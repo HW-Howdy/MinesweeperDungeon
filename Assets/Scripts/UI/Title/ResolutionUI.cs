@@ -9,6 +9,8 @@ public class ResolutionUI : MonoBehaviour
 	[SerializeField]
 	private TMP_Dropdown _resolutionDropdown;
 
+	private static bool Is_Trigger_On_Program_Start = false;
+
 	private Resolution[] resolutions;
 
 	public void Start()
@@ -22,8 +24,15 @@ public class ResolutionUI : MonoBehaviour
 		{
 			string option = $"{resolutions[i].width} X {resolutions[i].height}";
 
-			if (resolutions[i].width == 800 &&
+			if (!Is_Trigger_On_Program_Start &&
+				resolutions[i].width == 800 &&
 				resolutions[i].height == 600)
+			{
+				currentIndex = i;
+			}
+			else if (Is_Trigger_On_Program_Start &&
+				resolutions[i].width == Screen.width &&
+				resolutions[i].height ==  Screen.height)
 			{
 				currentIndex = i;
 			}
@@ -32,6 +41,7 @@ public class ResolutionUI : MonoBehaviour
 		_resolutionDropdown.AddOptions(options);
 		_resolutionDropdown.value = currentIndex;
 		_resolutionDropdown.RefreshShownValue();
+		Is_Trigger_On_Program_Start = true;
 		return ;
 	}
 
