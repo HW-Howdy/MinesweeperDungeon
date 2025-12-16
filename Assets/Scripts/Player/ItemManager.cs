@@ -22,6 +22,16 @@ public class ItemManager : ASingleton<ItemManager>
 
 	public event Action ActionItemValueChanged;
 
+	public void Reset()
+	{
+		for (int i = 0; i < itemList.Length; i++)
+		{
+			itemList[i] = 0;
+		}
+		ActionItemValueChanged?.Invoke();
+		return ;
+	}
+
 	public void GetItem(int index, int amount = 1)
 	{
 		if (index < 0 || index >= itemList.Length)

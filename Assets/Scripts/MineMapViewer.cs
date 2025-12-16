@@ -44,6 +44,9 @@ public class MineMapViewer : MonoBehaviour
 	public void OnDestroy()
 	{
 		CellView.StaticActionAfterClick -= UpdateCellView;
+		GameManager.Instance.ActionOpenCellAfter -= UpdateCellView;
+		MineMapModel.Instance.ActionResizeMapAfter -= Resize;
+		MineMapModel.Instance.ActionReloadMap -= UpdateCellView;
 		return ;
 	}
 

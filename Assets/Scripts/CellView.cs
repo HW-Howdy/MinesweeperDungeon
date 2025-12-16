@@ -65,9 +65,9 @@ public class CellView : MonoBehaviour, IPointerClickHandler, IPointerEnterHandle
 		{
 			_text.text = MineMapModel.Instance.GetCountResultAsChar(y, x).ToString();
 			if (_text.text.Equals("m"))
-				_background.color = Color.magenta;
+				_background.color = GameManager.Instance.MineState[0].color;
 			else if (_text.text.Equals("i"))
-				_background.color = Color.cyan;
+				_background.color = GameManager.Instance.MineState[1].color;
 			else if (_text.text.Equals("n"))
 				_background.color = Color.green;
 			else

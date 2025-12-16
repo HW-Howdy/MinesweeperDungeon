@@ -54,9 +54,9 @@ public class GameManager : AMonoSingleton<GameManager>
 	protected override void Awake()
 	{
 		base.Awake();
-		mineState[0].SetValue(1, Color.magenta);
-		mineState[1].SetValue(1, Color.cyan);
-		mineState[2].SetValue(1, Color.yellow);
+		mineState[0].SetValue(1, new Color(1.00000f, 0.44313f, 0.62352f) );
+		mineState[1].SetValue(1, new Color(0.37266f, 0.90188f, 0.90188f) );
+		mineState[2].SetValue(1, new Color(0.90188f, 0.85751f, 0.42711f) );
 		counter = new GameResultCounter();
 		return;
 	}
@@ -77,6 +77,7 @@ public class GameManager : AMonoSingleton<GameManager>
 		ActionNextFloor = null;
 		PlayerState.Instance.SetHealth(6);
 		PlayerState.Instance.SetMana(4);
+		ItemManager.Instance.Reset();
 		NextFloor();
 		SetFloorNext(gameMode);
 		return;

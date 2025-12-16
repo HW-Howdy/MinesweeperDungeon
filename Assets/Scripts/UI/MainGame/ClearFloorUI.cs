@@ -31,7 +31,14 @@ public class ClearFloorUI : MonoBehaviour
 		rectUI = UI.GetComponent<RectTransform>();
 		originSize = rectUI.sizeDelta;
 		GameManager.Instance.ActionClearFloorAfter += SetActiveTrue;
-		return;
+		return ;
+	}
+
+	public void OnDestroy()
+	{
+
+		GameManager.Instance.ActionClearFloorAfter += SetActiveTrue;
+		return ;
 	}
 
 	public void Update()

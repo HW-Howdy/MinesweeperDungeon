@@ -15,6 +15,14 @@ public class PlayerUI : MonoBehaviour
 		return ;
 	}
 
+	public void OnDestroy()
+	{
+		GameManager.Instance.ActionAfterUpdateFloor -= UpdateFloorUI;
+		PlayerState.Instance.ActionAfterEditHealth -= UpdateHealthUI;
+		PlayerState.Instance.ActionAfterEditMana -= UpdateManaUI;
+		return ;
+	}
+
 	public void UpdateFloorUI(int current, int max)
 	{
 		tmpFloor.text = $"B{current:D2}F / {max:D2}";

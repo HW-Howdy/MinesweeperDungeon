@@ -14,6 +14,13 @@ public class MineDamageUI : MonoBehaviour
 		return ;
 	}
 
+	public void OnDestroy()
+	{
+		GameManager.Instance.ActionOpenCellAfter -= UpdateUI;
+		ItemManager.Instance.ActionItemValueChanged -= UpdateUI;
+		return ;
+	}
+
 	public void Start()
 	{
 		for (int i = 0; i < _mineDamageUICells.Length; i++)

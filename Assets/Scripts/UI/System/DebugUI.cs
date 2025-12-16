@@ -15,6 +15,12 @@ public class DebugUI : MonoBehaviour
 		return ;
 	}
 
+	public void OnDestroy()
+	{
+		GameManager.Instance.ActionOpenCellAfter -= UpdateUI;
+		return;
+	}
+
 	public void UpdateUI()
 	{
 		textGameMode.text = GameManager.Instance.GameState.modeName;

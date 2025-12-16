@@ -23,6 +23,12 @@ public class NextFloorUI : MonoBehaviour
 		return ;
 	}
 
+	public void OnDestroy()
+	{
+		GameManager.Instance.ActionQuestNextFloor -= SetActiveTrue;
+		return;
+	}
+
 	public void Update()
 	{
 		Resize();

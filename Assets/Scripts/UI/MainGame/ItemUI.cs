@@ -14,6 +14,12 @@ public class ItemUI : MonoBehaviour
 		return ;
 	}
 
+	public void OnDestroy()
+	{
+		ItemManager.Instance.ActionItemValueChanged -= UpdateUI;
+		return ;
+	}
+
 	public void UpdateUI()
 	{
 		for (int i = 0; i < _itemText.Length; i++)
